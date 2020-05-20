@@ -7,7 +7,7 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("sets/")
-    fun getSets(): Call<Map<String, List<Set>>>
+    fun listSets(): Call<Map<String, List<Set>>>
 
     @GET("types/")
     fun listTypes(): Call<Map<String, List<String>>>
