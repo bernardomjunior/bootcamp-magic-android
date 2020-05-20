@@ -15,6 +15,7 @@ buildscript {
         unit_junit = '4.12'
         instrumented_junit = '1.1.1'
         espresso_core = '3.2.0'
+        okhttp3 = '4.7.2'
     }
 
     dependencies {
