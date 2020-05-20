@@ -30,7 +30,11 @@ object ApiRepository {
         .build()
         .create(ApiService::class.java)
 
-    fun listSets() {
+    fun listSets(
+        onSuccess: (List<Set>) -> Unit,
+        onError: () -> Unit,
+        onFailure: () -> Unit
+    ) {
         retrofit.listSets().enqueue(object : Callback<Map<String, List<Set>>> {
             override fun onResponse(
                 call: Call<Map<String, List<Set>>>,
@@ -38,20 +42,23 @@ object ApiRepository {
             ) {
                 if (response.isSuccessful) {
                     val dict = response.body() as Map<String, List<Set>>
-                    val sets = dict["sets"]
-                    TODO("Return Logic not yet implemented")
+                    dict["sets"]?.let(onSuccess)
                 } else {
-                    TODO("Not 200ish Response Error not yet implemented")
+                    onError()
                 }
             }
 
             override fun onFailure(call: Call<Map<String, List<Set>>>, t: Throwable) {
-                TODO("Failure not yet implemented")
+                onFailure()
             }
         })
     }
 
-    fun listTypes() {
+    fun listTypes(
+        onSuccess: (List<String>) -> Unit,
+        onError: () -> Unit,
+        onFailure: () -> Unit
+    ) {
         retrofit.listTypes().enqueue(object : Callback<Map<String, List<String>>> {
             override fun onResponse(
                 call: Call<Map<String, List<String>>>,
@@ -59,15 +66,15 @@ object ApiRepository {
             ) {
                 if (response.isSuccessful) {
                     val dict = response.body() as Map<String, List<String>>
-                    val types = dict["types"]
-                    TODO("Return Logic not yet implemented")
+                    dict["types"]?.let(onSuccess)
+
                 } else {
-                    TODO("Not 200ish Response Error not yet implemented")
+                    onError()
                 }
             }
 
             override fun onFailure(call: Call<Map<String, List<String>>>, t: Throwable) {
-                TODO("Failure not yet implemented")
+                onFailure()
             }
         })
     }
