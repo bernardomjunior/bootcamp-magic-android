@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MagicDeck</string>
+
+    <!--  begin region Catalog  -->
+    <string name="catalog_card_description">Magic card</string>
+    <string name="catalog_title">How about these cards?</string>
+    <!--  end region Catalog  -->
+
 </resources>

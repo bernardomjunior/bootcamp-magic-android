@@ -1,4 +1,4 @@
-package com.bootcamp.concrete.magicdeck.ui
+package com.bootcamp.concrete.magicdeck.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
