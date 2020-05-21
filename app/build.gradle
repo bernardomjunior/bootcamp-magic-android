@@ -41,6 +41,9 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
     implementation "androidx.recyclerview:recyclerview:$recycler_view"
 
+    // Picasso
+    implementation "com.squareup.picasso:picasso:$picasso_version"
+
     //Test
     testImplementation "junit:junit:$unit_junit"
     androidTestImplementation "androidx.test.ext:junit:$instrumented_junit"
