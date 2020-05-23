@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/medium_margin"
         android:textStyle="bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -29,6 +29,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tool:listitem="@layout/card_item"
-        android:layout_margin="16dp"/>
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/medium_margin"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
