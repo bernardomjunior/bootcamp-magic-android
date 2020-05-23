@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_item.view.image_card_item
 
 class CardsListAdapter(
@@ -17,6 +18,10 @@ class CardsListAdapter(
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(card: Card, listener: (card: Card) -> Unit) {
+            Picasso.get()
+                .load(card.imageUrl)
+                .error(R.drawable.card_example)
+                .into(itemView.image_card_item)
             itemView.image_card_item.setOnClickListener { listener(card) }
         }
     }
