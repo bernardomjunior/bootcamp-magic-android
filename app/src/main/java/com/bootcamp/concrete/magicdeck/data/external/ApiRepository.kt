@@ -1,34 +1,13 @@
 package com.bootcamp.concrete.magicdeck.data.external
 
-import com.bootcamp.concrete.magicdeck.BuildConfig.BASE_URL
 import com.bootcamp.concrete.magicdeck.data.domain.Set
-import com.google.gson.GsonBuilder
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 object ApiRepository {
 
-    private val okhttp3 = OkHttpClient()
-        .newBuilder()
-        .connectTimeout(60, TimeUnit.SECONDS)
-        .readTimeout(60, TimeUnit.SECONDS)
-        .build()
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(okhttp3)
-        .addConverterFactory(
-            GsonConverterFactory.create(
-                GsonBuilder().create()
-            )
-        )
-        .build()
-        .create(ApiService::class.java)
+    private val retrofit = ApiNetwork.retrofit
 
     fun listSets(
         onSuccess: (List<Set>) -> Unit,
