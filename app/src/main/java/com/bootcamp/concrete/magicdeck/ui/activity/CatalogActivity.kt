@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
-import com.bootcamp.concrete.magicdeck.data.domain.CardListHeader
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
 import com.bootcamp.concrete.magicdeck.ui.adapter.CardsListAdapter
 import com.bootcamp.concrete.magicdeck.ui.adapter.DividerItemDecoration
