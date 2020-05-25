@@ -10,4 +10,4 @@ class Card (
     val set: String,
     val id: String,
     val imageUrl: String?
-): Parcelable
+): Parcelable, CardListItem
