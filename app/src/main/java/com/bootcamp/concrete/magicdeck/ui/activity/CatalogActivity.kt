@@ -19,9 +19,7 @@ class CatalogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catalog)
-        for(i in 1..100){
-            cards.add(Card("a$i", listOf("2$i"), "123$i", "123213$i", "123$i"))
-        }
+        setUpList()
     }
 
     private fun setUpList() {
