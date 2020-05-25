@@ -2,4 +2,5 @@
 <resources>
     <integer name="default_column_amount">3</integer>
     <integer name="list_divider_size">8</integer>
+    <integer name="list_span_size">3</integer>
 </resources>
