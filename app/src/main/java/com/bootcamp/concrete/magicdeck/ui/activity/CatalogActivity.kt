@@ -29,9 +29,9 @@ class CatalogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catalog)
         setUpList()
-
+        catalogViewModel.getInitialCards()
         catalogViewModel.getViewState().observe(this) {
-            when (it){
+            when (it) {
                 is CatalogViewModelState.NavigateToCarousel -> startCardCarouselActivity(it.card)
                 is CatalogViewModelState.ListCards -> listCards(it.cardListItems)
                 is CatalogViewModelState.Failure -> showErrorMessage()
@@ -74,7 +74,7 @@ class CatalogActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun listCards(list: List<CardListItem>){
+    private fun listCards(list: List<CardListItem>) {
         cards.addAll(list)
         cards_catalog.adapter?.notifyItemRangeInserted(
             cards.size - list.size,
@@ -82,12 +82,17 @@ class CatalogActivity : AppCompatActivity() {
         )
     }
 
-    private fun showErrorMessage(@StringRes stringId: Int){
-        Toast.makeText(this@CatalogActivity, resources.getString(stringId), Toast.LENGTH_SHORT).show()
+    private fun showErrorMessage(@StringRes stringId: Int) {
+        Toast.makeText(this@CatalogActivity, resources.getString(stringId), Toast.LENGTH_SHORT)
+            .show()
     }
 
-    private fun showErrorMessage(){
-        Toast.makeText(this@CatalogActivity, resources.getString(R.string.failure_error), Toast.LENGTH_SHORT).show()
+    private fun showErrorMessage() {
+        Toast.makeText(
+            this@CatalogActivity,
+            resources.getString(R.string.request_failure),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 }
