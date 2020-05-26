@@ -2,7 +2,9 @@ package com.bootcamp.concrete.magicdeck.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,11 +30,14 @@ class CatalogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_catalog)
         setUpList()
 
-        catalogViewModel.getViewState().observe(this, {
+        catalogViewModel.getViewState().observe(this) {
             when (it){
                 is CatalogViewModelState.NavigateToCarousel -> startCardCarouselActivity(it.card)
+                is CatalogViewModelState.ListCards -> listCards(it.cardListItems)
+                is CatalogViewModelState.Failure -> showErrorMessage()
+                is CatalogViewModelState.Error -> showErrorMessage(it.stringId)
             }
-        })
+        }
 
 
     }
@@ -67,6 +72,22 @@ class CatalogActivity : AppCompatActivity() {
         val intent = Intent(this@CatalogActivity, CardCarouselActivity::class.java)
         intent.putExtra("card", card)
         startActivity(intent)
+    }
+
+    private fun listCards(list: List<CardListItem>){
+        cards.addAll(list)
+        cards_catalog.adapter?.notifyItemRangeInserted(
+            cards.size - list.size,
+            list.size
+        )
+    }
+
+    private fun showErrorMessage(@StringRes stringId: Int){
+        Toast.makeText(this@CatalogActivity, resources.getString(stringId), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showErrorMessage(){
+        Toast.makeText(this@CatalogActivity, resources.getString(R.string.failure_error), Toast.LENGTH_SHORT).show()
     }
 
 }
