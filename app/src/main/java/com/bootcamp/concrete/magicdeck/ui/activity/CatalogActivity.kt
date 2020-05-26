@@ -12,7 +12,7 @@ import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
 import com.bootcamp.concrete.magicdeck.ui.adapter.CardsListAdapter
-import com.bootcamp.concrete.magicdeck.ui.adapter.DividerItemDecoration
+import com.bootcamp.concrete.magicdeck.ui.decoration.DividerItemDecoration
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModel
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelState
