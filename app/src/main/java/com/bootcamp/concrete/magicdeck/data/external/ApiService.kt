@@ -19,6 +19,6 @@ interface ApiService {
         @Query("set") set: String,
         @Query("type") type: String,
         @Query("page") page: Int
-    ): Call<List<Card>>
+    ): Call<Map<String,List<Card>>>
 
 }

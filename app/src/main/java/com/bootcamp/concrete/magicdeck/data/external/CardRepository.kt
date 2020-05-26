@@ -10,24 +10,26 @@ object CardRepository {
     private val retrofit = ApiNetwork.retrofit
 
     fun listCards(
-        onSuccess: (List<Card>) -> Unit,
-        onError: () -> Unit,
-        onFailure: () -> Unit,
         set: String,
         type: String,
-        page: Int
+        page: Int,
+        onSuccess: (List<Card>) -> Unit,
+        onError: () -> Unit,
+        onFailure: () -> Unit
+
     ){
         retrofit.listCards(set, type, page).enqueue(
-            object : Callback<List<Card>>{
-                override fun onResponse(call: Call<List<Card>>, response: Response<List<Card>>) {
+            object : Callback<Map<String,List<Card>>>{
+                override fun onResponse(call: Call<Map<String,List<Card>>>, response: Response<Map<String,List<Card>>>) {
                     if (response.isSuccessful){
-                        onSuccess(response.body() as List<Card>)
+                        val map = response.body() as Map<String,List<Card>>
+                        map["cards"]?.let(onSuccess)
                     }else{
                         onError()
                     }
                 }
 
-                override fun onFailure(call: Call<List<Card>>, t: Throwable) {
+                override fun onFailure(call: Call<Map<String,List<Card>>>, t: Throwable) {
                     onFailure()
                 }
             }
