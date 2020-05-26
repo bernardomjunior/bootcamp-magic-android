@@ -29,6 +29,10 @@ android {
 
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
@@ -38,6 +42,16 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.core:core-ktx:$core_ktx"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
+    implementation "androidx.recyclerview:recyclerview:$recycler_view"
+
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.fragment:fragment-ktx:$fragment_ktx"
+
+    // Picasso
+    implementation "com.squareup.picasso:picasso:$picasso_version"
 
     //Test
     testImplementation "junit:junit:$unit_junit"
@@ -48,4 +62,5 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_verison"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_verison"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3"
+
 }

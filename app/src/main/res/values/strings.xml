@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MagicDeck</string>
+
+    <!--  begin region Catalog  -->
+    <string name="catalog_card_description">Magic card</string>
+    <string name="catalog_title">How about these cards?</string>
+    <!--  end region Catalog  -->
+
+    <!--  begin region Error-->
+    <string name="request_failure">A unexpected error occurred, maybe there is no internet connection.</string>
+    <string name="request_error">Could not get online needed resource.</string>
+    <!--  end region Error-->
+
 </resources>
