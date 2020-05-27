@@ -8,11 +8,13 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
 import com.bootcamp.concrete.magicdeck.ui.adapter.CardsListAdapter
 import com.bootcamp.concrete.magicdeck.ui.decoration.DividerItemDecoration
+import com.bootcamp.concrete.magicdeck.ui.listener.EndlessRecyclerViewScrollListener
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModel
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelState
@@ -55,6 +57,16 @@ class CatalogActivity : AppCompatActivity() {
             GridLayoutManager(this@CatalogActivity, resources.getInteger(R.integer.list_span_size))
         changeListItemSpanSize(layoutManager)
         cards_catalog.layoutManager = layoutManager
+        setListEndlessScroll(layoutManager)
+    }
+
+    private fun setListEndlessScroll(layoutManager: GridLayoutManager) {
+        cards_catalog.addOnScrollListener(object :
+            EndlessRecyclerViewScrollListener(layoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                catalogViewModel.getCards()
+            }
+        })
     }
 
     private fun changeListItemSpanSize(layoutManager: GridLayoutManager) {
