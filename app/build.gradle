@@ -44,6 +44,8 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
     implementation "androidx.recyclerview:recyclerview:$recycler_view"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$coordinator_layout"
+    implementation "com.google.android.material:material:$material"
 
     // LiveData
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

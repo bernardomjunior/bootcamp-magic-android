@@ -21,6 +21,8 @@ buildscript {
         picasso_version = '2.71828'
         fragment_ktx = '1.2.4'
         lifecycle_version = '2.2.0'
+        coordinator_layout = '1.1.0'
+        material = '1.1.0'
     }
 
     dependencies {
