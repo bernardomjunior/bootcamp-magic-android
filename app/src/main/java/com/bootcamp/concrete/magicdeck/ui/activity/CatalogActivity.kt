@@ -2,6 +2,7 @@ package com.bootcamp.concrete.magicdeck.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
@@ -19,6 +20,7 @@ import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModel
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelState
 import kotlinx.android.synthetic.main.activity_catalog.cards_catalog
+import kotlinx.android.synthetic.main.activity_catalog.progress_bar_catalog
 
 class CatalogActivity : AppCompatActivity() {
 
@@ -31,7 +33,22 @@ class CatalogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catalog)
         setUpList()
+        observeViewModelState()
+        observeViewModelLoading()
         catalogViewModel.getInitialCards()
+
+    }
+
+    private fun observeViewModelLoading() {
+        catalogViewModel.getLoading().observe(this) {
+            when (it) {
+                is CatalogViewModelState.LoadingCards -> showProgressBar()
+                is CatalogViewModelState.DoneLoading -> hideProgressBar()
+            }
+        }
+    }
+
+    private fun observeViewModelState() {
         catalogViewModel.getViewState().observe(this) {
             when (it) {
                 is CatalogViewModelState.NavigateToCarousel -> startCardCarouselActivity(it.card)
@@ -40,8 +57,6 @@ class CatalogActivity : AppCompatActivity() {
                 is CatalogViewModelState.Error -> showErrorMessage(it.stringId)
             }
         }
-
-
     }
 
     private fun setUpList() {
@@ -73,7 +88,12 @@ class CatalogActivity : AppCompatActivity() {
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 cards_catalog.adapter?.let {
-                    return it.getItemViewType(position)
+                    return when (it.getItemViewType(position)){
+                        CardsListAdapter.CARD -> 1
+                        CardsListAdapter.CARD_LIST_HEADER -> 3
+                        CardsListAdapter.LOADING -> 3
+                        else -> 1
+                    }
                 }
                 return 1
             }
@@ -105,6 +125,14 @@ class CatalogActivity : AppCompatActivity() {
             resources.getString(R.string.request_failure),
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun showProgressBar(){
+        progress_bar_catalog.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar(){
+        progress_bar_catalog.visibility = View.GONE
     }
 
 }

@@ -23,11 +23,14 @@ class CatalogViewModel : ViewModel() {
     private var allCardsRequested = false
 
     private val state = MutableLiveData<CatalogViewModelState>()
+    private val loading = MutableLiveData<CatalogViewModelState>()
 
     fun getViewState(): LiveData<CatalogViewModelState> = state
+    fun getLoading(): LiveData<CatalogViewModelState> = loading
 
     fun getInitialCards() {
         if (cards.isEmpty()) {
+            loading.value = CatalogViewModelState.LoadingCards
             getTypes {
                 getSets {
                     getCards()
@@ -60,22 +63,24 @@ class CatalogViewModel : ViewModel() {
 
     fun getCards() {
         if (!allCardsRequested) {
+            loading.value = CatalogViewModelState.LoadingCards
             CardRepository.listCards(
                 sets[setsIndex].code,
                 types[typesIndex],
                 pageNumber,
                 {
+
                     if (it.isEmpty()) {
                         nextTypeOrSet()
                         getCards()
                     } else {
+                        loading.value = CatalogViewModelState.DoneLoading
                         val addedSize = addCards(it)
                         if (it.size < 100) {
                             nextTypeOrSet()
                         } else {
                             nextPage()
                         }
-
                         state.value = CatalogViewModelState.ListCards(
                             cards.subList(
                                 cards.size - addedSize,
@@ -84,8 +89,10 @@ class CatalogViewModel : ViewModel() {
                         )
                     }
                 },
-                { state.value = CatalogViewModelState.Error(R.string.request_error) },
-                { state.value = CatalogViewModelState.Failure }
+                { state.value = CatalogViewModelState.Error(R.string.request_error)
+                    loading.value = CatalogViewModelState.DoneLoading},
+                { state.value = CatalogViewModelState.Failure
+                    loading.value = CatalogViewModelState.DoneLoading}
             )
         }
     }

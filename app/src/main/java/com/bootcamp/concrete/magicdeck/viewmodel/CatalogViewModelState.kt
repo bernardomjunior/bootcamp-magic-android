@@ -9,4 +9,6 @@ sealed class CatalogViewModelState {
     object Failure : CatalogViewModelState()
     data class NavigateToCarousel(val card: Card) : CatalogViewModelState()
     data class ListCards(val cardListItems: List<CardListItem>) : CatalogViewModelState()
+    object LoadingCards : CatalogViewModelState()
+    object DoneLoading : CatalogViewModelState()
 }
