@@ -11,7 +11,6 @@ import com.bootcamp.concrete.magicdeck.data.domain.CardListHeader
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_item.view.image_card_item
-import kotlinx.android.synthetic.main.card_item.view.text_card_placeholder
 import kotlinx.android.synthetic.main.list_header.view.txt_list_header
 
 class CardsListAdapter(
@@ -43,21 +42,13 @@ class CardsListAdapter(
             card: Card,
             listener: (card: Card) -> Unit
         ) {
-            Picasso.get()
-                .load(card.imageUrl)
-                .error(R.mipmap.apicard)
-                .into(itemView.image_card_item)
-//            if (card.imageUrl == null) {
-//                itemView.image_card_item.setImageResource(R.mipmap.blank_card2)
-//                itemView.text_card_placeholder.visibility = View.VISIBLE
-//                itemView.text_card_placeholder.text = card.name
-//            } else {
-////                itemView.text_card_placeholder.visibility = View.GONE
-//                Picasso.get()
-//                    .load(card.imageUrl)
-//                    .error(R.mipmap.blank_card2)
-//                    .into(itemView.image_card_item)
-//            }
+            if (card.imageUrl == null) {
+                itemView.image_card_item.setImageResource(R.drawable.blank_card)
+            } else {
+                Picasso.get()
+                    .load(card.imageUrl)
+                    .into(itemView.image_card_item)
+            }
             itemView.setOnClickListener { listener(card) }
         }
     }
