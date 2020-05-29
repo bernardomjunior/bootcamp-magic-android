@@ -8,6 +8,7 @@ import retrofit2.Response
 object SetRepository {
 
     private val retrofit = ApiNetwork.retrofit
+    private val SETS = "sets"
 
     fun listSets(
         onSuccess: (List<Set>) -> Unit,
@@ -21,7 +22,7 @@ object SetRepository {
             ) {
                 if (response.isSuccessful) {
                     val dict = response.body() as Map<String, List<Set>>
-                    dict["sets"]?.let(onSuccess)
+                    dict[SETS]?.let(onSuccess)
                 } else {
                     onError()
                 }

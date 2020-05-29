@@ -7,6 +7,7 @@ import retrofit2.Response
 object TypeRepository {
 
     private val retrofit = ApiNetwork.retrofit
+    private val TYPES = "types"
 
     fun listTypes(
         onSuccess: (List<String>) -> Unit,
@@ -20,7 +21,7 @@ object TypeRepository {
             ) {
                 if (response.isSuccessful) {
                     val dict = response.body() as Map<String, List<String>>
-                    dict["types"]?.let(onSuccess)
+                    dict[TYPES]?.let(onSuccess)
 
                 } else {
                     onError()
