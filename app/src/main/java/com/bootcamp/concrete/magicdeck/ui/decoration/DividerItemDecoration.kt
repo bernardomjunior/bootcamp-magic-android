@@ -15,8 +15,6 @@ class DividerItemDecoration(
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-//        outRect.bottom = spaceInDP
-//        outRect.top = spaceInDP
         outRect.left = spaceInDP / 2
         outRect.right = spaceInDP / 2
     }
