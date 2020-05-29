@@ -9,6 +9,7 @@ import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.data.domain.CardListHeader
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
+import com.bootcamp.concrete.magicdeck.data.domain.LoadingCards
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_item.view.image_card_item
 import kotlinx.android.synthetic.main.list_header.view.txt_list_header
@@ -17,66 +18,95 @@ class CardsListAdapter(
     private val cardList: List<CardListItem>,
     private val context: Context,
     private val listener: (card: Card) -> Unit
-) : RecyclerView.Adapter<CardsListAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
+        const val PLACE_HOLDER_CARD = 0
         const val CARD = 1
         const val CARD_LIST_HEADER = 2
         const val LOADING = 3
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(listItem: CardListItem, listener: (card: Card) -> Unit) {
-            when (listItem) {
-                is Card -> initCard(listItem, listener)
-                is CardListHeader -> initHeader(listItem)
-            }
+    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-        }
-
-        private fun initHeader(header: CardListHeader) {
-            itemView.txt_list_header.text = header.text
-        }
-
-        private fun initCard(
+    class PlaceHolderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(
             card: Card,
             listener: (card: Card) -> Unit
         ) {
-            if (card.imageUrl == null) {
-                itemView.image_card_item.setImageResource(R.drawable.blank_card)
-            } else {
-                Picasso.get()
-                    .load(card.imageUrl)
-                    .into(itemView.image_card_item)
-            }
+            itemView.image_card_item.setImageResource(R.drawable.blank_card)
+            itemView.setOnClickListener { listener(card) }
+        }
+    }
+
+    class HeaderPlaceHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(header: CardListHeader) {
+            itemView.txt_list_header.text = header.text
+        }
+    }
+
+    class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(
+            card: Card,
+            listener: (card: Card) -> Unit
+        ) {
+            Picasso.get()
+                .load(card.imageUrl)
+                .into(itemView.image_card_item)
             itemView.setOnClickListener { listener(card) }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (cardList[position] is Card) 1 else 3
+        return when (cardList[position]) {
+            is Card -> getCardType(cardList[position] as Card)
+            is CardListHeader -> CARD_LIST_HEADER
+            is LoadingCards -> LOADING
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        if (viewType == CARD) {
-            return ViewHolder(
+    private fun getCardType(card: Card): Int {
+        if (card.imageUrl == null) {
+            return PLACE_HOLDER_CARD
+        }
+        return CARD
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            PLACE_HOLDER_CARD -> PlaceHolderViewHolder(
                 LayoutInflater.from(context).inflate(
                     R.layout.card_item, parent, false
                 )
             )
-        } else {
-            return ViewHolder(
+            LOADING -> LoadingViewHolder(
+                LayoutInflater.from(context).inflate(
+                    R.layout.list_loading, parent, false
+                )
+            )
+            CARD_LIST_HEADER -> HeaderPlaceHolder(
                 LayoutInflater.from(context).inflate(
                     R.layout.list_header, parent, false
                 )
             )
+            else -> CardViewHolder(
+                LayoutInflater.from(context).inflate(
+                    R.layout.card_item, parent, false
+                )
+            )
         }
-
     }
 
     override fun getItemCount() = cardList.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(cardList[position], listener)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder.itemViewType) {
+            CARD -> (holder as CardViewHolder).bind(cardList[position] as Card, listener)
+            PLACE_HOLDER_CARD -> (holder as PlaceHolderViewHolder).bind(
+                cardList[position] as Card,
+                listener
+            )
+            CARD_LIST_HEADER -> (holder as HeaderPlaceHolder).bind(cardList[position] as CardListHeader)
+        }
     }
 }
