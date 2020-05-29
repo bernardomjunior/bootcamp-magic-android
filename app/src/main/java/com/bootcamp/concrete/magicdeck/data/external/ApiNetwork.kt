@@ -11,7 +11,6 @@ object ApiNetwork {
 
     private val okhttp3 by lazy {  OkHttpClient()
         .newBuilder()
-        .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .build()
     }
