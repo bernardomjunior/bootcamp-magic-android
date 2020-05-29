@@ -53,12 +53,12 @@ class CatalogActivity : AppCompatActivity() {
     }
 
     private fun observeViewModelState() {
-        catalogViewModel.getViewState().observe(this) {
-            when (it) {
-                is CatalogViewModelState.NavigateToCarousel -> startCardCarouselActivity(it.card)
-                is CatalogViewModelState.ListCards -> listCards(it.cardListItems)
+        catalogViewModel.getViewState().observe(this) { state ->
+            when (state) {
+                is CatalogViewModelState.NavigateToCarousel -> startCardCarouselActivity(state.card)
+                is CatalogViewModelState.ListCards -> listCards(state.cardListItems)
                 is CatalogViewModelState.Failure -> showErrorMessage()
-                is CatalogViewModelState.Error -> showErrorMessage(it.stringId)
+                is CatalogViewModelState.Error -> showErrorMessage(state.stringId)
             }
         }
     }
@@ -91,8 +91,8 @@ class CatalogActivity : AppCompatActivity() {
     private fun changeListItemSpanSize(layoutManager: GridLayoutManager) {
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                cards_catalog.adapter?.let {
-                    return when (it.getItemViewType(position)){
+                cards_catalog.adapter?.let { adapter ->
+                    return when (adapter.getItemViewType(position)){
                         CardsListAdapter.CARD -> 1
                         CardsListAdapter.CARD_LIST_HEADER -> 3
                         CardsListAdapter.LOADING -> 3
