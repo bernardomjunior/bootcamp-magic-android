@@ -5,8 +5,10 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class DividerItemDecoration(
-    private val spaceInDP: Int
+    spaceInDP: Int
 ) : RecyclerView.ItemDecoration() {
+
+    private val horizontalMargin = spaceInDP/2
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -15,7 +17,7 @@ class DividerItemDecoration(
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect.left = spaceInDP / 2
-        outRect.right = spaceInDP / 2
+        outRect.left = horizontalMargin
+        outRect.right = horizontalMargin
     }
 }
