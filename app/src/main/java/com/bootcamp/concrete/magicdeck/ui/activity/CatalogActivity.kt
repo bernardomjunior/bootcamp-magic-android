@@ -24,6 +24,10 @@ import kotlinx.android.synthetic.main.activity_catalog.progress_bar_catalog
 
 class CatalogActivity : AppCompatActivity() {
 
+    companion object{
+        const val CARD_EXTRA = "card"
+    }
+
     private val cards = ArrayList<CardListItem>()
     private val catalogViewModel: CatalogViewModel by viewModels {
         CatalogViewModelFactory()
@@ -102,7 +106,7 @@ class CatalogActivity : AppCompatActivity() {
 
     private fun startCardCarouselActivity(card: Card) {
         val intent = Intent(this@CatalogActivity, CardCarouselActivity::class.java)
-        intent.putExtra("card", card)
+        intent.putExtra(CARD_EXTRA, card)
         startActivity(intent)
     }
 
