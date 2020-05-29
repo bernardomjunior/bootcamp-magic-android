@@ -6,8 +6,7 @@
     android:id="@+id/txt_list_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="@dimen/list_header_size"
-    android:textStyle="bold"
+    style="@style/ListHeader"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tool:text="Creatures" />

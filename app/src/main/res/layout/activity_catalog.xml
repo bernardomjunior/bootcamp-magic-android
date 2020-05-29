@@ -28,8 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/medium_margin"
                     android:text="@string/catalog_title"
-                    android:textSize="@dimen/text_title"
-                    android:textStyle="bold" />
+                    style="@style/Title"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
