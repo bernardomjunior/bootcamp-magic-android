@@ -2,7 +2,6 @@ package com.bootcamp.concrete.magicdeck.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
+import com.bootcamp.concrete.magicdeck.data.domain.LoadingCards
 import com.bootcamp.concrete.magicdeck.ui.adapter.CardsListAdapter
 import com.bootcamp.concrete.magicdeck.ui.decoration.DividerItemDecoration
 import com.bootcamp.concrete.magicdeck.ui.listener.EndlessRecyclerViewScrollListener
@@ -20,7 +20,6 @@ import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModel
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelState
 import kotlinx.android.synthetic.main.activity_catalog.cards_catalog
-import kotlinx.android.synthetic.main.activity_catalog.progress_bar_catalog
 
 class CatalogActivity : AppCompatActivity() {
 
@@ -83,7 +82,9 @@ class CatalogActivity : AppCompatActivity() {
         cards_catalog.addOnScrollListener(object :
             EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                catalogViewModel.getCards()
+                if (cards.size > 1){
+                    catalogViewModel.getCards()
+                }
             }
         })
     }
@@ -132,11 +133,17 @@ class CatalogActivity : AppCompatActivity() {
     }
 
     private fun showProgressBar(){
-        progress_bar_catalog.visibility = View.VISIBLE
+        if (!cards.isEmpty() && cards.last() is LoadingCards){
+            return
+        }
+        cards.add(LoadingCards())
+        cards_catalog.adapter?.notifyItemInserted(cards.size - 1)
     }
 
     private fun hideProgressBar(){
-        progress_bar_catalog.visibility = View.GONE
+        cards.remove(cards.last())
+        cards_catalog.adapter?.notifyItemRemoved(cards.size - 1)
+
     }
 
 }

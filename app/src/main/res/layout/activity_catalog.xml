@@ -1,59 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+            <TextView
+                android:id="@+id/catalog_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:layout_margin="@dimen/medium_margin"
+                android:text="@string/catalog_title"
+                style="@style/Title"/>
 
-                <TextView
-                    android:id="@+id/catalog_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/medium_margin"
-                    android:text="@string/catalog_title"
-                    style="@style/Title"/>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cards_catalog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/medium_margin"
+        tool:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tool:listitem="@layout/card_item"
+        tool:spanCount="@integer/default_column_amount"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cards_catalog"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:layout_marginEnd="@dimen/medium_margin"
-            tool:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tool:listitem="@layout/card_item"
-            tool:spanCount="@integer/default_column_amount"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <ProgressBar
-        android:id="@+id/progress_bar_catalog"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
