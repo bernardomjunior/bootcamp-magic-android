@@ -1,6 +1,7 @@
 package com.bootcamp.concrete.magicdeck.ui.activity
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -88,6 +89,7 @@ class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) 
                 removeCardFromDeck()
             }
         }
+        setUpToolbar()
     }
 
     private fun getCardExtra(): Card? {
@@ -120,4 +122,19 @@ class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) 
         state = REMOVE_STATE
     }
 
+    private fun setUpToolbar() {
+        supportActionBar?.apply {
+            setDisplayShowHomeEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_close_white_24)
+        }
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
