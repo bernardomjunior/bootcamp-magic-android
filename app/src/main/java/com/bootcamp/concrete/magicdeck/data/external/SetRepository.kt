@@ -5,7 +5,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object SetRepository {
+class SetRepository {
 
     private val retrofit = ApiNetwork.retrofit
     private val SETS = "sets"

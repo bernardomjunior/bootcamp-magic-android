@@ -14,6 +14,10 @@ import com.bootcamp.concrete.magicdeck.data.external.TypeRepository
 
 class CatalogViewModel : ViewModel() {
 
+    private val typeRepository = TypeRepository()
+    private val setRepository = SetRepository()
+    private val cardRepository = CardRepository()
+
     private val types = ArrayList<String>()
     private val sets = ArrayList<Set>()
     val cards = ArrayList<CardListItem>()
@@ -42,29 +46,33 @@ class CatalogViewModel : ViewModel() {
     }
 
     private fun getTypes(funct: () -> Unit) {
-        TypeRepository.listTypes(
+        typeRepository.listTypes(
             {
                 types.addAll(it)
                 funct()
             },
-            { state.value = CatalogViewModelState.Error(R.string.request_error) },
-            { state.value = CatalogViewModelState.Failure })
+            { state.value = CatalogViewModelState.Error(R.string.request_error)
+                loading.value = CatalogViewModelState.DoneLoading},
+            { state.value = CatalogViewModelState.Failure
+                loading.value = CatalogViewModelState.DoneLoading})
     }
 
     private fun getSets(funct: () -> Unit) {
-        SetRepository.listSets(
+        setRepository.listSets(
             {
                 sets.addAll(it)
                 funct()
             },
-            { state.value = CatalogViewModelState.Error(R.string.request_error) },
-            { state.value = CatalogViewModelState.Failure })
+            { state.value = CatalogViewModelState.Error(R.string.request_error)
+                loading.value = CatalogViewModelState.DoneLoading},
+            { state.value = CatalogViewModelState.Failure
+                loading.value = CatalogViewModelState.DoneLoading})
     }
 
     fun getCards() {
         if (!allCardsRequested) {
             loading.value = CatalogViewModelState.LoadingCards
-            CardRepository.listCards(
+            cardRepository.listCards(
                 sets[setsIndex].code,
                 types[typesIndex],
                 pageNumber,
@@ -116,13 +124,13 @@ class CatalogViewModel : ViewModel() {
     }
 
     private fun addCards(list: List<Card>): Int {
-        var itemsAdded = list.size
+        var itemsAmountAdded = list.size
         if (pageNumber == 1 && list.isNotEmpty()) {
             cards.add(CardListHeader(types[typesIndex]))
-            itemsAdded += 1
+            itemsAmountAdded += 1
         }
         cards.addAll(list)
-        return itemsAdded
+        return itemsAmountAdded
     }
 
 }
