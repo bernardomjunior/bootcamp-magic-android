@@ -21,7 +21,7 @@ import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelState
 import kotlinx.android.synthetic.main.activity_catalog.cards_catalog
 
-class CatalogActivity : AppCompatActivity() {
+class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
 
     companion object{
         const val CARD_EXTRA = "card"
@@ -34,7 +34,6 @@ class CatalogActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_catalog)
         setUpList()
         observeViewModelState()
         observeViewModelLoading()
