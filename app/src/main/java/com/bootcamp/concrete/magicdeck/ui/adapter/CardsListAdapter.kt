@@ -10,7 +10,7 @@ import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.data.domain.CardListHeader
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
 import com.bootcamp.concrete.magicdeck.data.domain.LoadingCards
-import com.squareup.picasso.Picasso
+import com.bootcamp.concrete.magicdeck.extension.loadImage
 import kotlinx.android.synthetic.main.card_item.view.image_card_item
 import kotlinx.android.synthetic.main.list_header.view.txt_list_header
 
@@ -50,9 +50,7 @@ class CardsListAdapter(
             card: Card,
             listener: (card: Card) -> Unit
         ) {
-            Picasso.get()
-                .load(card.imageUrl)
-                .into(itemView.image_card_item)
+            itemView.image_card_item.loadImage(card.imageUrl)
             itemView.setOnClickListener { listener(card) }
         }
     }
