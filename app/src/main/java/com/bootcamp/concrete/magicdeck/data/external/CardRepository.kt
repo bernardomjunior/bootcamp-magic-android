@@ -5,9 +5,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-object CardRepository {
+class CardRepository {
 
     private val retrofit = ApiNetwork.retrofit
+    private val CARDS = "cards"
 
     fun listCards(
         set: String,
@@ -23,7 +24,7 @@ object CardRepository {
                 override fun onResponse(call: Call<Map<String,List<Card>>>, response: Response<Map<String,List<Card>>>) {
                     if (response.isSuccessful){
                         val map = response.body() as Map<String,List<Card>>
-                        map["cards"]?.let(onSuccess)
+                        map[CARDS]?.let(onSuccess)
                     }else{
                         onError()
                     }

@@ -15,3 +15,5 @@ class Card (
 ): Parcelable, CardListItem()
 
 class CardListHeader(var text: String) : CardListItem()
+
+class LoadingCards() : CardListItem()

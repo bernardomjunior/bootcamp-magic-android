@@ -14,6 +14,10 @@ import com.bootcamp.concrete.magicdeck.data.external.TypeRepository
 
 class CatalogViewModel : ViewModel() {
 
+    private val typeRepository = TypeRepository()
+    private val setRepository = SetRepository()
+    private val cardRepository = CardRepository()
+
     private val types = ArrayList<String>()
     private val sets = ArrayList<Set>()
     val cards = ArrayList<CardListItem>()
@@ -23,11 +27,14 @@ class CatalogViewModel : ViewModel() {
     private var allCardsRequested = false
 
     private val state = MutableLiveData<CatalogViewModelState>()
+    private val loading = MutableLiveData<CatalogViewModelState>()
 
     fun getViewState(): LiveData<CatalogViewModelState> = state
+    fun getLoading(): LiveData<CatalogViewModelState> = loading
 
     fun getInitialCards() {
         if (cards.isEmpty()) {
+            loading.value = CatalogViewModelState.LoadingCards
             getTypes {
                 getSets {
                     getCards()
@@ -39,43 +46,49 @@ class CatalogViewModel : ViewModel() {
     }
 
     private fun getTypes(funct: () -> Unit) {
-        TypeRepository.listTypes(
+        typeRepository.listTypes(
             {
                 types.addAll(it)
                 funct()
             },
-            { state.value = CatalogViewModelState.Error(R.string.request_error) },
-            { state.value = CatalogViewModelState.Failure })
+            { state.value = CatalogViewModelState.Error(R.string.request_error)
+                loading.value = CatalogViewModelState.DoneLoading},
+            { state.value = CatalogViewModelState.Failure
+                loading.value = CatalogViewModelState.DoneLoading})
     }
 
     private fun getSets(funct: () -> Unit) {
-        SetRepository.listSets(
+        setRepository.listSets(
             {
                 sets.addAll(it)
                 funct()
             },
-            { state.value = CatalogViewModelState.Error(R.string.request_error) },
-            { state.value = CatalogViewModelState.Failure })
+            { state.value = CatalogViewModelState.Error(R.string.request_error)
+                loading.value = CatalogViewModelState.DoneLoading},
+            { state.value = CatalogViewModelState.Failure
+                loading.value = CatalogViewModelState.DoneLoading})
     }
 
     fun getCards() {
         if (!allCardsRequested) {
-            CardRepository.listCards(
+            loading.value = CatalogViewModelState.LoadingCards
+            cardRepository.listCards(
                 sets[setsIndex].code,
                 types[typesIndex],
                 pageNumber,
                 {
+
                     if (it.isEmpty()) {
                         nextTypeOrSet()
                         getCards()
                     } else {
+                        loading.value = CatalogViewModelState.DoneLoading
                         val addedSize = addCards(it)
                         if (it.size < 100) {
                             nextTypeOrSet()
                         } else {
                             nextPage()
                         }
-
                         state.value = CatalogViewModelState.ListCards(
                             cards.subList(
                                 cards.size - addedSize,
@@ -84,8 +97,10 @@ class CatalogViewModel : ViewModel() {
                         )
                     }
                 },
-                { state.value = CatalogViewModelState.Error(R.string.request_error) },
-                { state.value = CatalogViewModelState.Failure }
+                { state.value = CatalogViewModelState.Error(R.string.request_error)
+                    loading.value = CatalogViewModelState.DoneLoading},
+                { state.value = CatalogViewModelState.Failure
+                    loading.value = CatalogViewModelState.DoneLoading}
             )
         }
     }
@@ -109,13 +124,13 @@ class CatalogViewModel : ViewModel() {
     }
 
     private fun addCards(list: List<Card>): Int {
-        var itemsAdded = list.size
+        var itemsAmountAdded = list.size
         if (pageNumber == 1 && list.isNotEmpty()) {
             cards.add(CardListHeader(types[typesIndex]))
-            itemsAdded += 1
+            itemsAmountAdded += 1
         }
         cards.addAll(list)
-        return itemsAdded
+        return itemsAmountAdded
     }
 
 }

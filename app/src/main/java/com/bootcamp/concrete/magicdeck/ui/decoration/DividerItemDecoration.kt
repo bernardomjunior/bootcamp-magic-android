@@ -1,12 +1,14 @@
-package com.bootcamp.concrete.magicdeck.ui.adapter
+package com.bootcamp.concrete.magicdeck.ui.decoration
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class DividerItemDecoration(
-    private val spaceInDP: Int
+    spaceInDP: Int
 ) : RecyclerView.ItemDecoration() {
+
+    private val horizontalMargin = spaceInDP/2
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -15,9 +17,7 @@ class DividerItemDecoration(
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-//        outRect.bottom = spaceInDP;
-//        outRect.top = spaceInDP;
-        outRect.left = spaceInDP / 2;
-        outRect.right = spaceInDP / 2;
+        outRect.left = horizontalMargin
+        outRect.right = horizontalMargin
     }
 }
