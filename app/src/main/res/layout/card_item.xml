@@ -6,5 +6,5 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:contentDescription="@string/catalog_card_description"
-    tool:visibility="visible"
-    tool:background="@drawable/blank_card"/>
+    tool:background="@drawable/blank_card"
+    tool:visibility="visible" />

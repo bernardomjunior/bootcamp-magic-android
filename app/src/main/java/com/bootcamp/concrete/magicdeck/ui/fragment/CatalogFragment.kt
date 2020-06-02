@@ -36,7 +36,6 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
         observeViewModelState()
         observeViewModelLoading()
         catalogViewModel.getInitialCards()
-
     }
 
     private fun observeViewModelLoading() {

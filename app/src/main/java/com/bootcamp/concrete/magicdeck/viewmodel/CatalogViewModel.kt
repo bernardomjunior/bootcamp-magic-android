@@ -21,6 +21,7 @@ class CatalogViewModel : ViewModel() {
     private val types = ArrayList<String>()
     private val sets = ArrayList<Set>()
     val cards = ArrayList<CardListItem>()
+
     private var typesIndex = 0
     private var setsIndex = 0
     private var pageNumber = 1
@@ -37,6 +38,7 @@ class CatalogViewModel : ViewModel() {
             loading.value = CatalogViewModelState.LoadingCards
             getTypes {
                 getSets {
+                    loading.value = CatalogViewModelState.DoneLoading
                     getCards()
                 }
             }
@@ -48,13 +50,17 @@ class CatalogViewModel : ViewModel() {
     private fun getTypes(funct: () -> Unit) {
         typeRepository.listTypes(
             {
-                types.addAll(it)
+                types.addAll(it.sorted())
                 funct()
             },
-            { state.value = CatalogViewModelState.Error(R.string.request_error)
-                loading.value = CatalogViewModelState.DoneLoading},
-            { state.value = CatalogViewModelState.Failure
-                loading.value = CatalogViewModelState.DoneLoading})
+            {
+                state.value = CatalogViewModelState.Error(R.string.request_error)
+                loading.value = CatalogViewModelState.DoneLoading
+            },
+            {
+                state.value = CatalogViewModelState.Failure
+                loading.value = CatalogViewModelState.DoneLoading
+            })
     }
 
     private fun getSets(funct: () -> Unit) {
@@ -63,23 +69,27 @@ class CatalogViewModel : ViewModel() {
                 sets.addAll(it)
                 funct()
             },
-            { state.value = CatalogViewModelState.Error(R.string.request_error)
-                loading.value = CatalogViewModelState.DoneLoading},
-            { state.value = CatalogViewModelState.Failure
-                loading.value = CatalogViewModelState.DoneLoading})
+            {
+                state.value = CatalogViewModelState.Error(R.string.request_error)
+                loading.value = CatalogViewModelState.DoneLoading
+            },
+            {
+                state.value = CatalogViewModelState.Failure
+                loading.value = CatalogViewModelState.DoneLoading
+            })
     }
 
     fun getCards() {
-        if (!allCardsRequested) {
+        if (!allCardsRequested && loading.value is CatalogViewModelState.DoneLoading) {
             loading.value = CatalogViewModelState.LoadingCards
             cardRepository.listCards(
                 sets[setsIndex].code,
                 types[typesIndex],
                 pageNumber,
                 {
-
                     if (it.isEmpty()) {
                         nextTypeOrSet()
+                        loading.value = CatalogViewModelState.DoneLoading
                         getCards()
                     } else {
                         loading.value = CatalogViewModelState.DoneLoading
@@ -97,10 +107,14 @@ class CatalogViewModel : ViewModel() {
                         )
                     }
                 },
-                { state.value = CatalogViewModelState.Error(R.string.request_error)
-                    loading.value = CatalogViewModelState.DoneLoading},
-                { state.value = CatalogViewModelState.Failure
-                    loading.value = CatalogViewModelState.DoneLoading}
+                {
+                    state.value = CatalogViewModelState.Error(R.string.request_error)
+                    loading.value = CatalogViewModelState.DoneLoading
+                },
+                {
+                    state.value = CatalogViewModelState.Failure
+                    loading.value = CatalogViewModelState.DoneLoading
+                }
             )
         }
     }
