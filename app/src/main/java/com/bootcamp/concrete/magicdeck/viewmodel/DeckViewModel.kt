@@ -54,18 +54,18 @@ class DeckViewModel : ViewModel() {
         }
     }
 
-    fun getFavorites(){
+    fun getFavorites() {
         val responseList = ArrayList<CardListItem>()
         val types = ArrayList<String>()
-        deck.map { card ->  types.addAll(card.types) }
-        for (type in types.distinct().sorted()){
+        deck.map { card -> types.addAll(card.types) }
+        for (type in types.distinct().sorted()) {
             responseList.add(CardListHeader(type))
-            responseList.addAll(deck.filter{card -> type in card.types})
+            responseList.addAll(deck.filter { card -> type in card.types })
         }
         _favorites.value = DeckViewModelState.Deck.List(responseList)
     }
 
-    fun getCardsAmount(){
+    fun getCardsAmount() {
         _favorites.value = DeckViewModelState.Deck.ListSize(deck.size)
     }
 

@@ -4,13 +4,11 @@
     <item
         android:id="@+id/navigation_catalog"
         android:icon="@drawable/ic_collections_24"
-        android:title="@string/catalog"
-        />
+        android:title="@string/catalog" />
 
     <item
         android:id="@+id/navigation_favorites"
         android:icon="@drawable/ic_favorite_24"
-        android:title="@string/favorites"
-        />
+        android:title="@string/favorites" />
 
 </menu>

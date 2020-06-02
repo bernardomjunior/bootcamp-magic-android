@@ -1,6 +1,5 @@
 package com.bootcamp.concrete.magicdeck.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,10 +53,14 @@ class CatalogViewModel : ViewModel() {
                 types.addAll(it.sorted())
                 funct()
             },
-            { state.value = CatalogViewModelState.Error(R.string.request_error)
-                loading.value = CatalogViewModelState.DoneLoading},
-            { state.value = CatalogViewModelState.Failure
-                loading.value = CatalogViewModelState.DoneLoading})
+            {
+                state.value = CatalogViewModelState.Error(R.string.request_error)
+                loading.value = CatalogViewModelState.DoneLoading
+            },
+            {
+                state.value = CatalogViewModelState.Failure
+                loading.value = CatalogViewModelState.DoneLoading
+            })
     }
 
     private fun getSets(funct: () -> Unit) {
@@ -66,22 +69,24 @@ class CatalogViewModel : ViewModel() {
                 sets.addAll(it)
                 funct()
             },
-            { state.value = CatalogViewModelState.Error(R.string.request_error)
-                loading.value = CatalogViewModelState.DoneLoading},
-            { state.value = CatalogViewModelState.Failure
-                loading.value = CatalogViewModelState.DoneLoading})
+            {
+                state.value = CatalogViewModelState.Error(R.string.request_error)
+                loading.value = CatalogViewModelState.DoneLoading
+            },
+            {
+                state.value = CatalogViewModelState.Failure
+                loading.value = CatalogViewModelState.DoneLoading
+            })
     }
 
     fun getCards() {
         if (!allCardsRequested && loading.value is CatalogViewModelState.DoneLoading) {
             loading.value = CatalogViewModelState.LoadingCards
-            Log.d("cartas", "aaaa1")
             cardRepository.listCards(
                 sets[setsIndex].code,
                 types[typesIndex],
                 pageNumber,
                 {
-                    Log.d("cartas", "aaaa2")
                     if (it.isEmpty()) {
                         nextTypeOrSet()
                         loading.value = CatalogViewModelState.DoneLoading
@@ -102,10 +107,14 @@ class CatalogViewModel : ViewModel() {
                         )
                     }
                 },
-                { state.value = CatalogViewModelState.Error(R.string.request_error)
-                    loading.value = CatalogViewModelState.DoneLoading},
-                { state.value = CatalogViewModelState.Failure
-                    loading.value = CatalogViewModelState.DoneLoading}
+                {
+                    state.value = CatalogViewModelState.Error(R.string.request_error)
+                    loading.value = CatalogViewModelState.DoneLoading
+                },
+                {
+                    state.value = CatalogViewModelState.Failure
+                    loading.value = CatalogViewModelState.DoneLoading
+                }
             )
         }
     }

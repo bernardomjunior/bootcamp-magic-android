@@ -8,7 +8,7 @@ class DividerItemDecoration(
     spaceInDP: Int
 ) : RecyclerView.ItemDecoration() {
 
-    private val horizontalMargin = spaceInDP/2
+    private val horizontalMargin = spaceInDP / 2
 
     override fun getItemOffsets(
         outRect: Rect,

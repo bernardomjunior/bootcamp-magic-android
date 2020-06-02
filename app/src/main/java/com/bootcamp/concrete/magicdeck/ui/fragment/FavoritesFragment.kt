@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
@@ -35,16 +35,18 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     private fun observeFavorites() {
         deckViewModel.favorites.observe(viewLifecycleOwner) {
             when (it) {
-                is DeckViewModelState.Deck.List -> { listCards(it.items) }
+                is DeckViewModelState.Deck.List -> {
+                    listCards(it.items)
+                }
                 is DeckViewModelState.Deck.ListSize -> setTitle(it.size)
             }
         }
     }
 
-    private fun setUpFields(){
+    private fun setUpFields() {
         deckViewModel.getCardsAmount()
         context?.let { context ->
-            favorites.adapter = CardsListAdapter(favoriteList, context){ card ->
+            favorites.adapter = CardsListAdapter(favoriteList, context) { card ->
                 navigateToCarousel(card)
             }
         }
@@ -75,14 +77,14 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         findNavController().navigate(action)
     }
 
-    private fun listCards(list: List<CardListItem>){
+    private fun listCards(list: List<CardListItem>) {
         deckViewModel.getCardsAmount()
         favoriteList.clear()
         favoriteList.addAll(list)
         favorites.adapter?.notifyDataSetChanged()
     }
 
-    private fun setTitle(size: Int){
+    private fun setTitle(size: Int) {
         var title = resources.getString(R.string.favorites_title)
         title += " ($size)"
         favorites_title.text = title
