@@ -1,14 +1,18 @@
 package com.bootcamp.concrete.magicdeck.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.bootcamp.concrete.magicdeck.BuildConfig
+import androidx.room.Room
 import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.data.domain.CardListHeader
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
+import com.bootcamp.concrete.magicdeck.data.local.CardDatabase
 
-class DeckViewModel : ViewModel() {
+class DeckViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _state = MutableLiveData<DeckViewModelState>()
     private val _response = MutableLiveData<DeckViewModelState.Response>()
@@ -25,9 +29,16 @@ class DeckViewModel : ViewModel() {
 
     private val deck = ArrayList<Card>()
 
+    private val db = Room.databaseBuilder(
+        getApplication(),
+        CardDatabase::class.java,
+        BuildConfig.DATABASE_NAME
+    ).build()
+
     fun addCardToDeck(card: Card) {
         if (!isCardInDeck(card)) {
             deck.add(card)
+            db.cardDao().addCard(card)
             _response.value = DeckViewModelState.Response.CardAdded
         } else {
             _response.value = DeckViewModelState.Response.Error(R.string.card_already_inside_deck)
@@ -37,6 +48,7 @@ class DeckViewModel : ViewModel() {
     fun removeCardFromDeck(card: Card) {
         if (isCardInDeck(card)) {
             deck.remove(card)
+            db.cardDao().removeCard(card)
         }
         _response.value = DeckViewModelState.Response.CardRemoved
     }
@@ -57,6 +69,8 @@ class DeckViewModel : ViewModel() {
     fun getFavorites() {
         val responseList = ArrayList<CardListItem>()
         val types = ArrayList<String>()
+        deck.clear()
+        deck.addAll(db.cardDao().getAll())
         deck.map { card -> types.addAll(card.types) }
         for (type in types.distinct().sorted()) {
             responseList.add(CardListHeader(type))

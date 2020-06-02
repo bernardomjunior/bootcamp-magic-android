@@ -27,7 +27,7 @@ class CarouselFragment : Fragment(R.layout.fragment_carousel) {
     lateinit var card: Card
 
     private val deckViewModel: DeckViewModel by activityViewModels {
-        DeckViewModelFactory()
+        DeckViewModelFactory(requireActivity().application)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

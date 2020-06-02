@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_favorites.favorites_title
 class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
     private val deckViewModel: DeckViewModel by activityViewModels {
-        DeckViewModelFactory()
+        DeckViewModelFactory(requireActivity().application)
     }
 
     private val favoriteList = ArrayList<CardListItem>()

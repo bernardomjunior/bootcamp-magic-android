@@ -4,11 +4,12 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.bootcamp.concrete.magicdeck.BuildConfig.DATABASE_NAME
 import kotlinx.android.parcel.Parcelize
 
 sealed class CardListItem
 
-@Entity
+@Entity(tableName = DATABASE_NAME)
 @Parcelize
 class Card(
     @ColumnInfo(name = "name")
@@ -25,4 +26,4 @@ class Card(
 
 class CardListHeader(var text: String) : CardListItem()
 
-class LoadingCards() : CardListItem()
+class LoadingCards : CardListItem()
