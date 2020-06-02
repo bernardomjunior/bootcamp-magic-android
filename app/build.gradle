@@ -65,4 +65,10 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_verison"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3"
 
+    //Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-fragment:$navigation_version"
+    implementation "androidx.navigation:navigation-ui:$navigation_version"
+
 }
