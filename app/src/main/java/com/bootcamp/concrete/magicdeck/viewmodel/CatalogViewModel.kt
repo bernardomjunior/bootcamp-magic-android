@@ -1,5 +1,6 @@
 package com.bootcamp.concrete.magicdeck.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,6 +22,7 @@ class CatalogViewModel : ViewModel() {
     private val types = ArrayList<String>()
     private val sets = ArrayList<Set>()
     val cards = ArrayList<CardListItem>()
+
     private var typesIndex = 0
     private var setsIndex = 0
     private var pageNumber = 1
@@ -37,6 +39,7 @@ class CatalogViewModel : ViewModel() {
             loading.value = CatalogViewModelState.LoadingCards
             getTypes {
                 getSets {
+                    loading.value = CatalogViewModelState.DoneLoading
                     getCards()
                 }
             }
@@ -48,7 +51,7 @@ class CatalogViewModel : ViewModel() {
     private fun getTypes(funct: () -> Unit) {
         typeRepository.listTypes(
             {
-                types.addAll(it)
+                types.addAll(it.sorted())
                 funct()
             },
             { state.value = CatalogViewModelState.Error(R.string.request_error)
@@ -70,16 +73,18 @@ class CatalogViewModel : ViewModel() {
     }
 
     fun getCards() {
-        if (!allCardsRequested) {
+        if (!allCardsRequested && loading.value is CatalogViewModelState.DoneLoading) {
             loading.value = CatalogViewModelState.LoadingCards
+            Log.d("cartas", "aaaa1")
             cardRepository.listCards(
                 sets[setsIndex].code,
                 types[typesIndex],
                 pageNumber,
                 {
-
+                    Log.d("cartas", "aaaa2")
                     if (it.isEmpty()) {
                         nextTypeOrSet()
+                        loading.value = CatalogViewModelState.DoneLoading
                         getCards()
                     } else {
                         loading.value = CatalogViewModelState.DoneLoading

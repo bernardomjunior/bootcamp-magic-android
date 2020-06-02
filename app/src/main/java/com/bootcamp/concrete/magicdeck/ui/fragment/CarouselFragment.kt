@@ -66,19 +66,9 @@ class CarouselFragment : Fragment(R.layout.fragment_carousel) {
         deckViewModel.response.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is DeckViewModelState.Response.CardAdded -> {
-                    Toast.makeText(
-                        activity,
-                        R.string.card_added_success,
-                        Toast.LENGTH_SHORT
-                    ).show()
                     removeState()
                 }
                 is DeckViewModelState.Response.CardRemoved -> {
-                    Toast.makeText(
-                        activity,
-                        R.string.card_removed_success,
-                        Toast.LENGTH_SHORT
-                    ).show()
                     addState()
                 }
                 is DeckViewModelState.Response.Error -> {
