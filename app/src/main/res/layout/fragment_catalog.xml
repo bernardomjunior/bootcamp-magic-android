@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,11 +20,11 @@
 
             <TextView
                 android:id="@+id/catalog_title"
+                style="@style/Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/medium_margin"
-                android:text="@string/catalog_title"
-                style="@style/Title"/>
+                android:text="@string/catalog_title" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -36,10 +35,10 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginEnd="@dimen/medium_margin"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         tool:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tool:listitem="@layout/card_item"
-        tool:spanCount="@integer/default_column_amount"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+        tool:spanCount="@integer/default_column_amount" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

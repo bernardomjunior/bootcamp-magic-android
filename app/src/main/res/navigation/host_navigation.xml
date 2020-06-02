@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/host_navigation"
+    app:startDestination="@id/navigation_catalog">
+
+    <fragment
+        android:id="@+id/navigation_catalog"
+        android:name="com.bootcamp.concrete.magicdeck.ui.fragment.CatalogFragment"
+        tools:layout="@layout/fragment_catalog">
+        <action
+            android:id="@+id/action_navigation_catalog_to_navigation_carousel"
+            app:destination="@id/navigation_carousel" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="com.bootcamp.concrete.magicdeck.ui.fragment.FavoritesFragment"
+        tools:layout="@layout/fragment_favorites">
+        <action
+            android:id="@+id/action_navigation_favorites_to_navigation_carousel"
+            app:destination="@id/navigation_carousel" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_carousel"
+        android:name="com.bootcamp.concrete.magicdeck.ui.fragment.CarouselFragment"
+        tools:layout="@layout/fragment_carousel">
+
+        <argument
+            android:name="card"
+            app:argType="com.bootcamp.concrete.magicdeck.data.domain.Card" />
+    </fragment>
+
+</navigation>

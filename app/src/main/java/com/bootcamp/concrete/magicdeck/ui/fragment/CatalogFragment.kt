@@ -1,12 +1,13 @@
-package com.bootcamp.concrete.magicdeck.ui.activity
+package com.bootcamp.concrete.magicdeck.ui.fragment
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bootcamp.concrete.magicdeck.R
@@ -19,21 +20,18 @@ import com.bootcamp.concrete.magicdeck.ui.listener.EndlessRecyclerViewScrollList
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModel
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelState
-import kotlinx.android.synthetic.main.activity_catalog.cards_catalog
+import kotlinx.android.synthetic.main.fragment_catalog.cards_catalog
 
-class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
-
-    companion object{
-        const val CARD_EXTRA = "card"
-    }
+class CatalogFragment : Fragment(R.layout.fragment_catalog) {
 
     private val cards = ArrayList<CardListItem>()
-    private val catalogViewModel: CatalogViewModel by viewModels {
+    private val catalogViewModel: CatalogViewModel by activityViewModels {
         CatalogViewModelFactory()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpList()
         observeViewModelState()
         observeViewModelLoading()
@@ -42,7 +40,7 @@ class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
     }
 
     private fun observeViewModelLoading() {
-        catalogViewModel.getLoading().observe(this) {
+        catalogViewModel.getLoading().observe(viewLifecycleOwner) {
             when (it) {
                 is CatalogViewModelState.LoadingCards -> showProgressBar()
                 is CatalogViewModelState.DoneLoading -> hideProgressBar()
@@ -51,9 +49,8 @@ class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
     }
 
     private fun observeViewModelState() {
-        catalogViewModel.getViewState().observe(this) { state ->
+        catalogViewModel.getViewState().observe(viewLifecycleOwner) { state ->
             when (state) {
-                is CatalogViewModelState.NavigateToCarousel -> startCardCarouselActivity(state.card)
                 is CatalogViewModelState.ListCards -> listCards(state.cardListItems)
                 is CatalogViewModelState.Failure -> showErrorMessage()
                 is CatalogViewModelState.Error -> showErrorMessage(state.stringId)
@@ -67,11 +64,14 @@ class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
                 resources.getInteger(R.integer.list_divider_size)
             )
         )
-        cards_catalog.adapter = CardsListAdapter(cards, this@CatalogActivity) {
-            startCardCarouselActivity(it)
+        activity?.let { activity ->
+            cards_catalog.adapter = CardsListAdapter(cards, activity) { card ->
+                navigateToCarousel(card)
+            }
+
         }
         val layoutManager =
-            GridLayoutManager(this@CatalogActivity, resources.getInteger(R.integer.list_span_size))
+            GridLayoutManager(activity, resources.getInteger(R.integer.list_span_size))
         changeListItemSpanSize(layoutManager)
         cards_catalog.layoutManager = layoutManager
         setListEndlessScroll(layoutManager)
@@ -81,7 +81,7 @@ class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
         cards_catalog.addOnScrollListener(object :
             EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                if (cards.size > 1){
+                if (cards.size > 1) {
                     catalogViewModel.getCards()
                 }
             }
@@ -92,7 +92,7 @@ class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 cards_catalog.adapter?.let { adapter ->
-                    return when (adapter.getItemViewType(position)){
+                    return when (adapter.getItemViewType(position)) {
                         CardsListAdapter.CARD -> 1
                         CardsListAdapter.CARD_LIST_HEADER -> 3
                         CardsListAdapter.LOADING -> 3
@@ -104,12 +104,6 @@ class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
         }
     }
 
-    private fun startCardCarouselActivity(card: Card) {
-        val intent = Intent(this@CatalogActivity, CardCarouselActivity::class.java)
-        intent.putExtra(CARD_EXTRA, card)
-        startActivity(intent)
-    }
-
     private fun listCards(list: List<CardListItem>) {
         cards.addAll(list)
         cards_catalog.adapter?.notifyItemRangeInserted(
@@ -119,29 +113,38 @@ class CatalogActivity : AppCompatActivity(R.layout.activity_catalog) {
     }
 
     private fun showErrorMessage(@StringRes stringId: Int) {
-        Toast.makeText(this@CatalogActivity, resources.getString(stringId), Toast.LENGTH_SHORT)
-            .show()
+        Toast.makeText(
+            activity,
+            resources.getString(stringId),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun showErrorMessage() {
         Toast.makeText(
-            this@CatalogActivity,
+            activity,
             resources.getString(R.string.request_failure),
             Toast.LENGTH_SHORT
         ).show()
     }
 
-    private fun showProgressBar(){
-        if (!cards.isEmpty() && cards.last() is LoadingCards){
+    private fun showProgressBar() {
+        if (!cards.isEmpty() && cards.last() is LoadingCards) {
             return
         }
         cards.add(LoadingCards())
         cards_catalog.adapter?.notifyItemInserted(cards.size - 1)
     }
 
-    private fun hideProgressBar(){
+    private fun hideProgressBar() {
         cards.remove(cards.last())
         cards_catalog.adapter?.notifyItemRemoved(cards.size - 1)
+
+    }
+
+    private fun navigateToCarousel(card: Card) {
+        val action = CatalogFragmentDirections.actionNavigationCatalogToNavigationCarousel(card)
+        findNavController().navigate(action)
 
     }
 

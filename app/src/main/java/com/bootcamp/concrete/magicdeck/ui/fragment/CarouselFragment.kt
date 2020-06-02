@@ -1,44 +1,56 @@
-package com.bootcamp.concrete.magicdeck.ui.activity
+package com.bootcamp.concrete.magicdeck.ui.fragment
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.extension.loadImage
 import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModel
 import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModelState
-import kotlinx.android.synthetic.main.activity_card_carousel.button_add_remove_favorite
-import kotlinx.android.synthetic.main.activity_card_carousel.image_card_description_item
+import kotlinx.android.synthetic.main.fragment_carousel.button_add_remove_favorite
+import kotlinx.android.synthetic.main.fragment_carousel.image_card_description_item
 
-class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) {
+class CarouselFragment : Fragment(R.layout.fragment_carousel) {
 
     private val ADD_STATE = 1
     private val REMOVE_STATE = 2
     private var state = ADD_STATE
 
-    private val card: Card? by lazy {
-        getCardExtra()
-    }
+    lateinit var card: Card
 
-    private val deckViewModel: DeckViewModel by viewModels {
+    private val deckViewModel: DeckViewModel by activityViewModels {
         DeckViewModelFactory()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val args: CarouselFragmentArgs by navArgs()
+        card = args.card
         setUpFields()
         observeViewModelResponse()
         observeViewModelState()
-        card?.let(::checkCard)
+        checkCard(card)
+    }
+
+    private fun setUpToolbar() {
+        setHasOptionsMenu(true)
+        activity?.actionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_close_white_24)
+        }
     }
 
     private fun observeViewModelState() {
-        deckViewModel.state.observe(this) {
+        deckViewModel.state.observe(viewLifecycleOwner) {
             when (it) {
                 is DeckViewModelState.CardInDeck -> {
                     removeState()
@@ -51,11 +63,11 @@ class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) 
     }
 
     private fun observeViewModelResponse() {
-        deckViewModel.response.observe(this) { response ->
+        deckViewModel.response.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is DeckViewModelState.Response.CardAdded -> {
                     Toast.makeText(
-                        this@CardCarouselActivity,
+                        activity,
                         R.string.card_added_success,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -63,7 +75,7 @@ class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) 
                 }
                 is DeckViewModelState.Response.CardRemoved -> {
                     Toast.makeText(
-                        this@CardCarouselActivity,
+                        activity,
                         R.string.card_removed_success,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -71,7 +83,7 @@ class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) 
                 }
                 is DeckViewModelState.Response.Error -> {
                     Toast.makeText(
-                        this@CardCarouselActivity,
+                        activity,
                         response.messageId,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -81,7 +93,7 @@ class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) 
     }
 
     private fun setUpFields() {
-        image_card_description_item.loadImage(card?.imageUrl)
+        image_card_description_item.loadImage(card.imageUrl)
         button_add_remove_favorite.setOnClickListener {
             if (state == ADD_STATE) {
                 addCardToDeck()
@@ -89,23 +101,16 @@ class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) 
                 removeCardFromDeck()
             }
         }
-        setUpToolbar()
+//        setUpToolbar()
     }
 
-    private fun getCardExtra(): Card? {
-        return intent?.extras?.getParcelable(CatalogActivity.CARD_EXTRA)
-    }
 
     private fun addCardToDeck() {
-        card?.let {
-            deckViewModel.addCardToDeck(it)
-        }
+        deckViewModel.addCardToDeck(card)
     }
 
     private fun removeCardFromDeck() {
-        card?.let {
-            deckViewModel.removeCardFromDeck(it)
-        }
+        deckViewModel.removeCardFromDeck(card)
     }
 
     private fun checkCard(card: Card) {
@@ -122,19 +127,12 @@ class CardCarouselActivity : AppCompatActivity(R.layout.activity_card_carousel) 
         state = REMOVE_STATE
     }
 
-    private fun setUpToolbar() {
-        supportActionBar?.apply {
-            setDisplayShowHomeEnabled(true)
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_close_white_24)
-        }
-
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            findNavController().popBackStack()
+            return true
         }
         return super.onOptionsItemSelected(item)
     }
+
 }
