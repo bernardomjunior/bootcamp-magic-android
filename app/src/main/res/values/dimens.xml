@@ -3,4 +3,5 @@
     <dimen name="text_title">56sp</dimen>
     <dimen name="medium_margin">16dp</dimen>
     <dimen name="list_header_size">16sp</dimen>
+    <dimen name="small_card_name_size">5sp</dimen>
 </resources>

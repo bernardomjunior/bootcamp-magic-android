@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
-    android:id="@+id/image_card_item"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:contentDescription="@string/catalog_card_description"
-    tool:background="@drawable/blank_card"
-    tool:visibility="visible" />
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image_card_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/catalog_card_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tool:background="@drawable/blank_card" />
+
+    <TextView
+        android:id="@+id/text_card_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxEms="@integer/name_max_ems"
+        android:maxLines="@integer/one_line_text"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/small_card_name_size"
+        app:layout_constraintBottom_toBottomOf="@id/image_card_item"
+        app:layout_constraintEnd_toEndOf="@id/image_card_item"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="@id/image_card_item"
+        app:layout_constraintTop_toTopOf="@id/image_card_item"
+        app:layout_constraintVertical_bias="0.085"
+        tool:text="dofighoudisfhogiudf" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

@@ -12,6 +12,7 @@ import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
 import com.bootcamp.concrete.magicdeck.data.domain.LoadingCards
 import com.bootcamp.concrete.magicdeck.extension.loadImage
 import kotlinx.android.synthetic.main.card_item.view.image_card_item
+import kotlinx.android.synthetic.main.card_item.view.text_card_item_name
 import kotlinx.android.synthetic.main.list_header.view.txt_list_header
 
 class CardsListAdapter(
@@ -34,6 +35,8 @@ class CardsListAdapter(
             card: Card,
             listener: (card: Card) -> Unit
         ) {
+            itemView.text_card_item_name.visibility = View.VISIBLE
+            itemView.text_card_item_name.text = card.name
             itemView.image_card_item.setImageResource(R.drawable.blank_card)
             itemView.setOnClickListener { listener(card) }
         }
@@ -50,6 +53,7 @@ class CardsListAdapter(
             card: Card,
             listener: (card: Card) -> Unit
         ) {
+            itemView.text_card_item_name.visibility = View.GONE
             itemView.image_card_item.loadImage(card.imageUrl)
             itemView.setOnClickListener { listener(card) }
         }
