@@ -44,7 +44,7 @@ class CarouselFragment : Fragment(R.layout.fragment_carousel) {
         setHasOptionsMenu(true)
         activity?.actionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_close_white_24)
         }
     }
@@ -91,7 +91,7 @@ class CarouselFragment : Fragment(R.layout.fragment_carousel) {
                 removeCardFromDeck()
             }
         }
-//        setUpToolbar()
+        setUpToolbar()
     }
 
 
