@@ -17,6 +17,7 @@ import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModelState
 import kotlinx.android.synthetic.main.fragment_carousel.button_add_remove_favorite
 import kotlinx.android.synthetic.main.fragment_carousel.image_card_description_item
+import kotlinx.android.synthetic.main.fragment_carousel.txt_card_description_name
 
 class CarouselFragment : Fragment(R.layout.fragment_carousel) {
 
@@ -83,7 +84,13 @@ class CarouselFragment : Fragment(R.layout.fragment_carousel) {
     }
 
     private fun setUpFields() {
-        image_card_description_item.loadImage(card.imageUrl)
+        if (card.imageUrl == null) {
+            txt_card_description_name.visibility = View.VISIBLE
+            txt_card_description_name.text = card.name
+            image_card_description_item.setImageResource(R.drawable.blank_card)
+        }else {
+            image_card_description_item.loadImage(card.imageUrl)
+        }
         button_add_remove_favorite.setOnClickListener {
             if (state == ADD_STATE) {
                 addCardToDeck()
