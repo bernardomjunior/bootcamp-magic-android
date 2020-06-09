@@ -3,6 +3,7 @@ package com.bootcamp.concrete.magicdeck.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.data.domain.CardListHeader
@@ -11,6 +12,7 @@ import com.bootcamp.concrete.magicdeck.data.domain.Set
 import com.bootcamp.concrete.magicdeck.data.external.CardRepository
 import com.bootcamp.concrete.magicdeck.data.external.SetRepository
 import com.bootcamp.concrete.magicdeck.data.external.TypeRepository
+import kotlinx.coroutines.launch
 
 class CatalogViewModel : ViewModel() {
 
@@ -48,64 +50,11 @@ class CatalogViewModel : ViewModel() {
     }
 
     private fun getTypes(funct: () -> Unit) {
-        typeRepository.listTypes(
-            {
-                types.addAll(it.sorted())
-                funct()
-            },
-            {
-                state.value = CatalogViewModelState.Error(R.string.request_error)
-                loading.value = CatalogViewModelState.DoneLoading
-            },
-            {
-                state.value = CatalogViewModelState.Failure
-                loading.value = CatalogViewModelState.DoneLoading
-            })
-    }
-
-    private fun getSets(funct: () -> Unit) {
-        setRepository.listSets(
-            {
-                sets.addAll(it)
-                funct()
-            },
-            {
-                state.value = CatalogViewModelState.Error(R.string.request_error)
-                loading.value = CatalogViewModelState.DoneLoading
-            },
-            {
-                state.value = CatalogViewModelState.Failure
-                loading.value = CatalogViewModelState.DoneLoading
-            })
-    }
-
-    fun getCards() {
-        if (!allCardsRequested && loading.value is CatalogViewModelState.DoneLoading) {
-            loading.value = CatalogViewModelState.LoadingCards
-            cardRepository.listCards(
-                sets[setsIndex].code,
-                types[typesIndex],
-                pageNumber,
+        viewModelScope.launch {
+            typeRepository.listTypes(
                 {
-                    if (it.isEmpty()) {
-                        nextTypeOrSet()
-                        loading.value = CatalogViewModelState.DoneLoading
-                        getCards()
-                    } else {
-                        loading.value = CatalogViewModelState.DoneLoading
-                        val addedSize = addCards(it)
-                        if (it.size < 100) {
-                            nextTypeOrSet()
-                        } else {
-                            nextPage()
-                        }
-                        state.value = CatalogViewModelState.ListCards(
-                            cards.subList(
-                                cards.size - addedSize,
-                                cards.size - 1
-                            )
-                        )
-                    }
+                    types.addAll(it.sorted())
+                    funct()
                 },
                 {
                     state.value = CatalogViewModelState.Error(R.string.request_error)
@@ -114,8 +63,67 @@ class CatalogViewModel : ViewModel() {
                 {
                     state.value = CatalogViewModelState.Failure
                     loading.value = CatalogViewModelState.DoneLoading
-                }
-            )
+                })
+        }
+    }
+
+    private fun getSets(funct: () -> Unit) {
+        viewModelScope.launch {
+            setRepository.listSets(
+                {
+                    sets.addAll(it)
+                    funct()
+                },
+                {
+                    state.value = CatalogViewModelState.Error(R.string.request_error)
+                    loading.value = CatalogViewModelState.DoneLoading
+                },
+                {
+                    state.value = CatalogViewModelState.Failure
+                    loading.value = CatalogViewModelState.DoneLoading
+                })
+        }
+    }
+
+    fun getCards() {
+        if (!allCardsRequested && loading.value is CatalogViewModelState.DoneLoading) {
+            loading.value = CatalogViewModelState.LoadingCards
+            viewModelScope.launch {
+                cardRepository.listCards(
+                        sets[setsIndex].code,
+                        types[typesIndex],
+                        pageNumber,
+                        {
+                            if (it.isEmpty()) {
+                                nextTypeOrSet()
+                                loading.value = CatalogViewModelState.DoneLoading
+                                getCards()
+                            } else {
+                                loading.value = CatalogViewModelState.DoneLoading
+                                val addedSize = addCards(it)
+                                if (it.size < 100) {
+                                    nextTypeOrSet()
+                                } else {
+                                    nextPage()
+                                }
+                                state.value = CatalogViewModelState.ListCards(
+                                        cards.subList(
+                                                cards.size - addedSize,
+                                                cards.size - 1
+                                        )
+                                )
+                            }
+                        },
+                        {
+                            state.value = CatalogViewModelState.Error(R.string.request_error)
+                            loading.value = CatalogViewModelState.DoneLoading
+                        },
+                        {
+                            state.value = CatalogViewModelState.Failure
+                            loading.value = CatalogViewModelState.DoneLoading
+                        }
+                )
+            }
         }
     }
 
