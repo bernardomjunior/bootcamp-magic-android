@@ -1,45 +1,26 @@
 package com.bootcamp.concrete.magicdeck.data.external
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers.IO
 
 class TypeRepository {
 
     private val retrofit = ApiNetwork.retrofit
-    private val TYPES = "types"
+    private val netWorkHelper = NetWorkHelper(IO)
 
-    suspend fun listTypes(
-        onSuccess: (List<String>) -> Unit,
-        onError: () -> Unit,
-        onFailure: () -> Unit
-    ) {
-        val response = retrofit.listTypes()
-        response[TYPES]?.let{
-            if (it.isNotEmpty()){
-                onSuccess(it)
+    suspend fun listTypes(): ResultWrapper<List<String>> {
+        val response = netWorkHelper.safeApiCall(retrofit::listTypes)
+        return when (response) {
+            is ResultWrapper.Success -> {
+                ResultWrapper.Success(
+                    response.value.values.toList()[0]
+                )
+            }
+            is ResultWrapper.NetworkError -> {
+                response
+            }
+            is ResultWrapper.GenericError -> {
+                response
             }
         }
-
-
-//        retrofit.listTypes().enqueue(object : Callback<Map<String, List<String>>> {
-//            override fun onResponse(
-//                call: Call<Map<String, List<String>>>,
-//                response: Response<Map<String, List<String>>>
-//            ) {
-//                if (response.isSuccessful) {
-//                    val dict = response.body() as Map<String, List<String>>
-//                    dict[TYPES]?.let(onSuccess)
-//
-//                } else {
-//                    onError()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Map<String, List<String>>>, t: Throwable) {
-//                onFailure()
-//            }
-//        })
     }
-
 }

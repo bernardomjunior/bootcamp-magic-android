@@ -1,41 +1,27 @@
 package com.bootcamp.concrete.magicdeck.data.external
 
 import com.bootcamp.concrete.magicdeck.data.domain.Set
+import kotlinx.coroutines.Dispatchers.IO
 
 class SetRepository {
 
     private val retrofit = ApiNetwork.retrofit
-    private val SETS = "sets"
+    private val netWorkHelper = NetWorkHelper(IO)
 
-    suspend fun listSets(
-        onSuccess: (List<Set>) -> Unit,
-        onError: () -> Unit,
-        onFailure: () -> Unit
-    ) {
-        val response= retrofit.listSets()
-        response[SETS]?.let{
-            if (it.isNotEmpty()) onSuccess(it)
+    suspend fun listSets(): ResultWrapper<List<Set>> {
+        val response = netWorkHelper.safeApiCall(retrofit::listSets)
+        return when (response) {
+            is ResultWrapper.Success -> {
+                ResultWrapper.Success(
+                    response.value.values.toList()[0]
+                )
+            }
+            is ResultWrapper.NetworkError -> {
+                response
+            }
+            is ResultWrapper.GenericError -> {
+                response
+            }
         }
-
-
-
-//        retrofit.listSets().enqueue(object : Callback<Map<String, List<Set>>> {
-//            override fun onResponse(
-//                call: Call<Map<String, List<Set>>>,
-//                response: Response<Map<String, List<Set>>>
-//            ) {
-//                if (response.isSuccessful) {
-//                    val dict = response.body() as Map<String, List<Set>>
-//                    dict[SETS]?.let(onSuccess)
-//                } else {
-//                    onError()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Map<String, List<Set>>>, t: Throwable) {
-//                onFailure()
-//            }
-//        })
     }
-
 }

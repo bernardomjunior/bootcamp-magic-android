@@ -1,48 +1,41 @@
 package com.bootcamp.concrete.magicdeck.data.external
 
 import com.bootcamp.concrete.magicdeck.data.domain.Card
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers.IO
 
 class CardRepository {
 
     private val retrofit = ApiNetwork.retrofit
-    private val CARDS = "cards"
+    private val netWorkHelper = NetWorkHelper(IO)
 
     suspend fun listCards(
         set: String,
         type: String,
-        page: Int,
-        onSuccess: (List<Card>) -> Unit,
-        onError: () -> Unit,
-        onFailure: () -> Unit
-
-    ) {
-        val response = retrofit.listCards(set, type, page)
-        response[CARDS]?.let(onSuccess)
-
-
-
-//        retrofit.listCards(set, type, page).enqueue(
-//            object : Callback<Map<String, List<Card>>> {
-//                override fun onResponse(
-//                    call: Call<Map<String, List<Card>>>,
-//                    response: Response<Map<String, List<Card>>>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        val map = response.body() as Map<String, List<Card>>
-//                        map[CARDS]?.let(onSuccess)
-//                    } else {
-//                        onError()
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<Map<String, List<Card>>>, t: Throwable) {
-//                    onFailure()
-//                }
-//            }
-//        )
+        page: Int
+    ): ResultWrapper<List<Card>> {
+        val response = netWorkHelper.safeApiCall(encapsulateListCard(set, type, page))
+        return when (response) {
+            is ResultWrapper.Success -> {
+                ResultWrapper.Success(
+                    response.value.values.toList()[0]
+                )
+            }
+            is ResultWrapper.NetworkError -> {
+                response
+            }
+            is ResultWrapper.GenericError -> {
+                response
+            }
+        }
     }
 
+    private fun encapsulateListCard(
+        set: String,
+        type: String,
+        page: Int
+    ): suspend () -> Map<String, List<Card>> {
+        return suspend {
+            retrofit.listCards(set, type, page)
+        }
+    }
 }
