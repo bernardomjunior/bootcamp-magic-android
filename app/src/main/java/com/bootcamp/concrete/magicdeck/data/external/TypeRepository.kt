@@ -1,6 +1,5 @@
 package com.bootcamp.concrete.magicdeck.data.external
 
-import org.koin.ext.getScopeName
 import org.koin.java.KoinJavaComponent.inject
 import retrofit2.Call
 import retrofit2.Callback
