@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-object ApiNetwork {
+class ApiNetwork {
 
     private val okhttp3 by lazy {
         OkHttpClient()

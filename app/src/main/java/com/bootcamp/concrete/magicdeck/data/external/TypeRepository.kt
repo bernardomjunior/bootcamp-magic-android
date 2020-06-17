@@ -1,12 +1,14 @@
 package com.bootcamp.concrete.magicdeck.data.external
 
+import org.koin.ext.getScopeName
+import org.koin.java.KoinJavaComponent.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class TypeRepository {
 
-    private val retrofit = ApiNetwork.retrofit
+    private val retrofit: ApiService by inject(ApiService::class.java)
     private val TYPES = "types"
 
     fun listTypes(
