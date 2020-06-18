@@ -15,17 +15,11 @@ import com.bootcamp.concrete.magicdeck.data.external.SetRepository
 import com.bootcamp.concrete.magicdeck.data.external.TypeRepository
 import kotlinx.coroutines.launch
 
-class CatalogViewModel : ViewModel() {
-
-    private val state = MutableLiveData<CatalogViewModelState>()
-    private val loading = MutableLiveData<CatalogViewModelState>()
-
-    fun getViewState(): LiveData<CatalogViewModelState> = state
-    fun getLoading(): LiveData<CatalogViewModelState> = loading
-
-    private val typeRepository = TypeRepository()
-    private val setRepository = SetRepository()
-    private val cardRepository = CardRepository()
+class CatalogViewModel(
+    private val typeRepository: TypeRepository,
+    private val setRepository: SetRepository,
+    private val cardRepository: CardRepository
+) : ViewModel() {
 
     private val types = ArrayList<String>()
     private val sets = ArrayList<Set>()
@@ -35,6 +29,12 @@ class CatalogViewModel : ViewModel() {
     private var setsIndex = 0
     private var pageNumber = 1
     private var allCardsRequested = false
+
+    private val state = MutableLiveData<CatalogViewModelState>()
+    private val loading = MutableLiveData<CatalogViewModelState>()
+
+    fun getViewState(): LiveData<CatalogViewModelState> = state
+    fun getLoading(): LiveData<CatalogViewModelState> = loading
 
     private fun nextPage() {
         pageNumber += 1
@@ -165,5 +165,4 @@ class CatalogViewModel : ViewModel() {
             )
         }
     }
-
 }

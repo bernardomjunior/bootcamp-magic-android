@@ -24,6 +24,7 @@ buildscript {
         coordinator_layout = '1.1.0'
         material = '1.1.0'
         navigation_version = '2.2.2'
+        koin_version = '2.1.6'
     }
 
     dependencies {

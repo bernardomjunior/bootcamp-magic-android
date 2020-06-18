@@ -3,9 +3,9 @@ package com.bootcamp.concrete.magicdeck.data.external
 import com.bootcamp.concrete.magicdeck.data.domain.Set
 import kotlinx.coroutines.Dispatchers.IO
 
-class SetRepository {
-
-    private val retrofit = ApiNetwork.retrofit
+class SetRepository(
+    private val retrofit: ApiService
+) {
     private val netWorkHelper = NetWorkHelper(IO)
 
     suspend fun listSets(): ResultWrapper<List<Set>> {
@@ -24,4 +24,5 @@ class SetRepository {
             }
         }
     }
+
 }

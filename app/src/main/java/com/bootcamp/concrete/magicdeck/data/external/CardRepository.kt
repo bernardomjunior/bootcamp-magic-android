@@ -3,9 +3,9 @@ package com.bootcamp.concrete.magicdeck.data.external
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import kotlinx.coroutines.Dispatchers.IO
 
-class CardRepository {
-
-    private val retrofit = ApiNetwork.retrofit
+class CardRepository(
+    private val retrofit: ApiService
+) {
     private val netWorkHelper = NetWorkHelper(IO)
 
     suspend fun listCards(
@@ -38,4 +38,5 @@ class CardRepository {
             retrofit.listCards(set, type, page)
         }
     }
+
 }
