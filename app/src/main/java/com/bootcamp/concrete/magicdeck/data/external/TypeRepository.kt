@@ -2,9 +2,9 @@ package com.bootcamp.concrete.magicdeck.data.external
 
 import kotlinx.coroutines.Dispatchers.IO
 
-class TypeRepository {
-
-    private val retrofit = ApiNetwork.retrofit
+class TypeRepository(
+    private val retrofit: ApiService
+) {
     private val netWorkHelper = NetWorkHelper(IO)
 
     suspend fun listTypes(): ResultWrapper<List<String>> {

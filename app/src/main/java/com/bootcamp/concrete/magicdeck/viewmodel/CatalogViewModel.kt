@@ -30,6 +30,12 @@ class CatalogViewModel(
     private var pageNumber = 1
     private var allCardsRequested = false
 
+    private val state = MutableLiveData<CatalogViewModelState>()
+    private val loading = MutableLiveData<CatalogViewModelState>()
+
+    fun getViewState(): LiveData<CatalogViewModelState> = state
+    fun getLoading(): LiveData<CatalogViewModelState> = loading
+
     private fun nextPage() {
         pageNumber += 1
     }
@@ -159,33 +165,4 @@ class CatalogViewModel(
             )
         }
     }
-
-    private fun nextPage() {
-        pageNumber += 1
-    }
-
-    private fun nextTypeOrSet() {
-        pageNumber = 1
-        if (types.size > typesIndex + 1) {
-            typesIndex += 1
-        } else {
-            if (sets.size > setsIndex + 1) {
-                setsIndex += 1
-                typesIndex = 0
-            } else {
-                allCardsRequested = false
-            }
-        }
-    }
-
-    private fun addCards(list: List<Card>): Int {
-        var itemsAmountAdded = list.size
-        if (pageNumber == 1 && list.isNotEmpty()) {
-            cards.add(CardListHeader(types[typesIndex]))
-            itemsAmountAdded += 1
-        }
-        cards.addAll(list)
-        return itemsAmountAdded
-    }
-
 }

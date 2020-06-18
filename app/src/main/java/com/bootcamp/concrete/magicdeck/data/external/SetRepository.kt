@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers.IO
 class SetRepository(
     private val retrofit: ApiService
 ) {
-    private val SETS = "sets"
+    private val netWorkHelper = NetWorkHelper(IO)
 
     suspend fun listSets(): ResultWrapper<List<Set>> {
         val response = netWorkHelper.safeApiCall(retrofit::listSets)
@@ -22,7 +22,7 @@ class SetRepository(
             is ResultWrapper.GenericError -> {
                 response
             }
-        })
+        }
     }
 
 }

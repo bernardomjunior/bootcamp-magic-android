@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers.IO
 class CardRepository(
     private val retrofit: ApiService
 ) {
-    private val CARDS = "cards"
+    private val netWorkHelper = NetWorkHelper(IO)
 
     suspend fun listCards(
         set: String,
