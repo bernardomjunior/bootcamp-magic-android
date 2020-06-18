@@ -6,7 +6,7 @@ import com.bootcamp.concrete.magicdeck.data.external.TypeRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single { TypeRepository(get()) }
-    single { CardRepository(get()) }
-    single { SetRepository(get()) }
+    single { TypeRepository(get(), get()) }
+    single { CardRepository(get(), get()) }
+    single { SetRepository(get(), get()) }
 }

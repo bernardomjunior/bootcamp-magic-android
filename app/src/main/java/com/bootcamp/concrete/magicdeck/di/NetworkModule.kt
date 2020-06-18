@@ -2,6 +2,8 @@ package com.bootcamp.concrete.magicdeck.di
 
 import com.bootcamp.concrete.magicdeck.BuildConfig
 import com.bootcamp.concrete.magicdeck.data.external.ApiService
+import com.bootcamp.concrete.magicdeck.data.external.NetWorkHelper
+import kotlinx.coroutines.Dispatchers.IO
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -39,5 +41,8 @@ val networkModule = module {
         val retrofit: Retrofit = get()
         retrofit
             .create(ApiService::class.java)
+    }
+    single {
+        NetWorkHelper(IO)
     }
 }
