@@ -6,7 +6,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class CardRepository(
-    val retrofit: ApiService
+    private val retrofit: ApiService
 ) {
     private val CARDS = "cards"
 

@@ -13,9 +13,9 @@ import com.bootcamp.concrete.magicdeck.data.external.SetRepository
 import com.bootcamp.concrete.magicdeck.data.external.TypeRepository
 
 class CatalogViewModel(
-    val typeRepository: TypeRepository,
-    val setRepository: SetRepository,
-    val cardRepository: CardRepository
+    private val typeRepository: TypeRepository,
+    private val setRepository: SetRepository,
+    private val cardRepository: CardRepository
 ) : ViewModel() {
 
     private val types = ArrayList<String>()

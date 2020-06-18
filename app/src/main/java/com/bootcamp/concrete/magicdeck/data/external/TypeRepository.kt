@@ -5,7 +5,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class TypeRepository(
-    val retrofit: ApiService
+    private val retrofit: ApiService
 ) {
     private val TYPES = "types"
 
