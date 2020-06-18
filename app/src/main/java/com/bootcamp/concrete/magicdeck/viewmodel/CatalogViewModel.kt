@@ -11,13 +11,12 @@ import com.bootcamp.concrete.magicdeck.data.domain.Set
 import com.bootcamp.concrete.magicdeck.data.external.CardRepository
 import com.bootcamp.concrete.magicdeck.data.external.SetRepository
 import com.bootcamp.concrete.magicdeck.data.external.TypeRepository
-import org.koin.java.KoinJavaComponent.inject
 
-class CatalogViewModel : ViewModel() {
-
-    private val typeRepository: TypeRepository by inject(TypeRepository::class.java)
-    private val setRepository: SetRepository by inject(SetRepository::class.java)
-    private val cardRepository: CardRepository by inject(CardRepository::class.java)
+class CatalogViewModel(
+    val typeRepository: TypeRepository,
+    val setRepository: SetRepository,
+    val cardRepository: CardRepository
+) : ViewModel() {
 
     private val types = ArrayList<String>()
     private val sets = ArrayList<Set>()
