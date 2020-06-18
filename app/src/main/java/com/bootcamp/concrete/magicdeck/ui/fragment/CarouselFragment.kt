@@ -5,7 +5,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,11 +12,11 @@ import com.bootcamp.concrete.magicdeck.R
 import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.extension.loadImage
 import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModel
-import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModelState
 import kotlinx.android.synthetic.main.fragment_carousel.button_add_remove_favorite
 import kotlinx.android.synthetic.main.fragment_carousel.image_card_description_item
 import kotlinx.android.synthetic.main.fragment_carousel.txt_card_description_name
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class CarouselFragment : Fragment(R.layout.fragment_carousel) {
 
@@ -27,9 +26,7 @@ class CarouselFragment : Fragment(R.layout.fragment_carousel) {
 
     lateinit var card: Card
 
-    private val deckViewModel: DeckViewModel by activityViewModels {
-        DeckViewModelFactory()
-    }
+    private val deckViewModel: DeckViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,7 +85,7 @@ class CarouselFragment : Fragment(R.layout.fragment_carousel) {
             txt_card_description_name.visibility = View.VISIBLE
             txt_card_description_name.text = card.name
             image_card_description_item.setImageResource(R.drawable.blank_card)
-        }else {
+        } else {
             image_card_description_item.loadImage(card.imageUrl)
         }
         button_add_remove_favorite.setOnClickListener {

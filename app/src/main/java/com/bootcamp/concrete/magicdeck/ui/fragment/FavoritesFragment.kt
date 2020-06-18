@@ -3,7 +3,6 @@ package com.bootcamp.concrete.magicdeck.ui.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,16 +11,15 @@ import com.bootcamp.concrete.magicdeck.data.domain.Card
 import com.bootcamp.concrete.magicdeck.data.domain.CardListItem
 import com.bootcamp.concrete.magicdeck.ui.adapter.CardsListAdapter
 import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModel
-import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.DeckViewModelState
 import kotlinx.android.synthetic.main.fragment_favorites.favorites
 import kotlinx.android.synthetic.main.fragment_favorites.favorites_title
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
-    private val deckViewModel: DeckViewModel by activityViewModels {
-        DeckViewModelFactory()
-    }
+
+    private val deckViewModel: DeckViewModel by sharedViewModel()
 
     private val favoriteList = ArrayList<CardListItem>()
 

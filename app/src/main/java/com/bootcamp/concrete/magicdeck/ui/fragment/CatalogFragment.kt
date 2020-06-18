@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,17 +17,15 @@ import com.bootcamp.concrete.magicdeck.ui.adapter.CardsListAdapter
 import com.bootcamp.concrete.magicdeck.ui.decoration.DividerItemDecoration
 import com.bootcamp.concrete.magicdeck.ui.listener.EndlessRecyclerViewScrollListener
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModel
-import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelFactory
 import com.bootcamp.concrete.magicdeck.viewmodel.CatalogViewModelState
 import kotlinx.android.synthetic.main.fragment_catalog.cards_catalog
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class CatalogFragment : Fragment(R.layout.fragment_catalog) {
 
     private val cards = ArrayList<CardListItem>()
-    private val catalogViewModel: CatalogViewModel by activityViewModels {
-        CatalogViewModelFactory()
-    }
 
+    private val catalogViewModel: CatalogViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
