@@ -1,14 +1,13 @@
 package com.bootcamp.concrete.magicdeck.data.external
 
 import com.bootcamp.concrete.magicdeck.data.domain.Card
-import org.koin.java.KoinJavaComponent.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CardRepository {
-
-    private val retrofit: ApiService by inject(ApiService::class.java)
+class CardRepository(
+    val retrofit: ApiService
+) {
     private val CARDS = "cards"
 
     fun listCards(
