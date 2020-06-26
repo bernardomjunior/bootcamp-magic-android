@@ -35,13 +35,9 @@ class NetWorkHelper(private val dispatcher: CoroutineDispatcher) {
 
     private fun convertErrorBody(throwable: HttpException): String? {
         return try {
-            throwable.response()?.errorBody()?.source()?.let {
-                val moshiAdapter = Moshi.Builder().build().adapter(String::class.java)
-                moshiAdapter.fromJson(it)
-            }
+            throwable.response()?.errorBody()?.source()?.readUtf8()
         } catch (exception: Exception) {
             null
         }
     }
-
 }
