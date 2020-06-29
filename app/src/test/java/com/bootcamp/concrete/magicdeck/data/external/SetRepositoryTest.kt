@@ -40,7 +40,7 @@ class SetRepositoryTest : KoinTest {
     private val retrofit = mockk<ApiService>()
 
     @Test
-    fun `givenSuccessResponse whenListing shouldReturnSuccessListOfSets`() = runBlocking {
+    fun `givenApiSuccessResponse whenListing shouldReturnSuccessListOfSets`() = runBlocking {
         // arrange
         val setRepository = SetRepository(retrofit, get())
         coEvery { retrofit.listSets() } returns successMockMapSet(javaClass.classLoader)
@@ -55,7 +55,7 @@ class SetRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `givenIOException whenListing shouldReturnNetWorkError`() = runBlocking {
+    fun `givenApiIOException whenListing shouldReturnNetWorkError`() = runBlocking {
         // arrange
         val setRepository = SetRepository(retrofit, get())
         coEvery { retrofit.listSets() } throws IOException()
@@ -70,7 +70,7 @@ class SetRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `givenHttpException whenListing shouldReturnGenericError`() = runBlocking {
+    fun `givenApiHttpException whenListing shouldReturnGenericError`() = runBlocking {
         // arrange
         val setRepository = SetRepository(retrofit, get())
         coEvery { retrofit.listSets() } throws HttpException(
@@ -90,7 +90,7 @@ class SetRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `givenNonSpecificException whenListing shouldReturnEmptyGenericError`() = runBlocking {
+    fun `givenApiNonSpecificException whenListing shouldReturnEmptyGenericError`() = runBlocking {
         // arrange
         val setRepository = SetRepository(retrofit, get())
         coEvery { retrofit.listSets() } throws Exception()

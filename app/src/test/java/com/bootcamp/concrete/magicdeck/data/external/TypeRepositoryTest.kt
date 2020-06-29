@@ -40,7 +40,7 @@ class TypeRepositoryTest : KoinTest {
     private val retrofit = mockk<ApiService>()
 
     @Test
-    fun `givenSuccessResponse whenListing shouldReturnSuccessListOfTypes`() = runBlocking {
+    fun `givenApiSuccessResponse whenListing shouldReturnSuccessListOfTypes`() = runBlocking {
         //arrange
         val typeRepository = TypeRepository(retrofit, get())
         coEvery { retrofit.listTypes() } returns successMockMapTypes(javaClass.classLoader)
@@ -55,7 +55,7 @@ class TypeRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `givenIOException whenListing shouldReturnNetWorkError`() = runBlocking {
+    fun `givenApiIOException whenListing shouldReturnNetWorkError`() = runBlocking {
         // arrange
         val typeRepository = TypeRepository(retrofit, get())
         coEvery { retrofit.listTypes() } throws IOException()
@@ -70,7 +70,7 @@ class TypeRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `givenHttpException whenListing shouldReturnGenericError`() = runBlocking {
+    fun `givenApiHttpException whenListing shouldReturnGenericError`() = runBlocking {
         // arrange
         val typeRepository = TypeRepository(retrofit, get())
         coEvery { retrofit.listTypes() } throws HttpException(
@@ -90,7 +90,7 @@ class TypeRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `givenNonSpecificException whenListing shouldReturnEmptyGenericError`() = runBlocking {
+    fun `givenApiNonSpecificException whenListing shouldReturnEmptyGenericError`() = runBlocking {
         // arrange
         val typeRepository = TypeRepository(retrofit, get())
         coEvery { retrofit.listTypes() } throws Exception()
