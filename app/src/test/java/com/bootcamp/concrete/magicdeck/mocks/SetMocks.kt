@@ -7,7 +7,8 @@ import com.bootcamp.concrete.magicdeck.extension.getJson
 const val setFile = "sets.json"
 
 fun successMockMapSet(classLoader: ClassLoader?): Map<String, List<Set>> {
-    return classLoader?.getJson(setFile) ?: throw IllegalArgumentException("Null ClassLoader passed as parameter")
+    return classLoader?.getJson(setFile)
+        ?: throw IllegalArgumentException("Null ClassLoader passed as parameter")
 }
 
 fun successMockListSet(classLoader: ClassLoader?): ResultWrapper<List<Set>> {
