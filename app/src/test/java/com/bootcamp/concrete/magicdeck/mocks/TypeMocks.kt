@@ -6,7 +6,7 @@ import com.bootcamp.concrete.magicdeck.extension.getJson
 const val typeFile = "types.json"
 
 fun successMockMapTypes(classLoader: ClassLoader?): Map<String, List<String>> {
-    return classLoader?.getJson(setFile) ?: throw IllegalArgumentException("Null ClassLoader passed as parameter")
+    return classLoader?.getJson(typeFile) ?: throw IllegalArgumentException("Null ClassLoader passed as parameter")
 }
 
 fun successMockListTypes(classLoader: ClassLoader?): ResultWrapper<List<String>> {
