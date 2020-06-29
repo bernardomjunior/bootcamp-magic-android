@@ -3,7 +3,6 @@ package com.bootcamp.concrete.magicdeck.mocks
 import com.bootcamp.concrete.magicdeck.data.domain.Set
 import com.bootcamp.concrete.magicdeck.data.external.ResultWrapper
 import com.bootcamp.concrete.magicdeck.extension.getJson
-import java.lang.IllegalArgumentException
 
 const val setFile = "sets.json"
 
